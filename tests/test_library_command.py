@@ -67,6 +67,12 @@ class TestLibraryCommand:
         dummy.check_library_list(legacy_valid_sources)
         assert isinstance(legacy_valid_sources[0], Library)
 
+    def test_legacy_build_library_compile (self, dummy, legacy_valid_sources, tmpdir_factory):
+        dummy.libraries = legacy_valid_sources
+        dummy.build_temp = dummy.build_clib = str(tmpdir_factory)
+        dummy.finalize_options()
+        dummy.run()
+
     def test_get_library_names (self, dummy, library, libraries):
         dummy.libraries = libraries
         names = dummy.get_library_names()
