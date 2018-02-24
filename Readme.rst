@@ -21,3 +21,11 @@ Additionally, Brujería has been developed as part of the Occult C++ Initiative,
 a set of tools and libraries meant to *demystify* the black magic of C and C++
 toolchains, compilers, build systems, and package managers. Brujería is an
 important foundation for this initiative.
+
+.. _setuptools: https://setuptools.readthedocs.io
+.. _build_ext: https://git.io/vAz6X
+.. _build_clib: https://git.io/vAz66
+.. _meson: https://mesonbuild.com
+.. _CMake: https://cmake.org
+.. _ninja: https://ninja-build.org
+.. _cppimport: https://github.com/tbenthompson/cppimport
