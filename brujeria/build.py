@@ -65,8 +65,6 @@ def patch (obj, attr, value):
 
 class ExtensionCommand (BuildCommandMixin, build_ext):
 
-    build_scope: None
-
     def _link (self, compiler, *args, **kwargs):
         self.parser = _create_link_parser(self.is_posix)
         with patch(self.compiler, 'spawn', self._target):
@@ -74,11 +72,10 @@ class ExtensionCommand (BuildCommandMixin, build_ext):
 
     def build_extensions (self):
         self.check_extensions_list(self.extensions)
-        for ext in self.extensions:
-        #with self.build_scope(ext):
-            with self._filter_build_errors(ext):
-                self.build_extension(ext)
-        self.build()
+        with self.build():
+            for ext in self.extensions:
+                with self._filter_build_errors(ext):
+                    self.build_extension(ext)
 
     def build_extension(self, ext: Extension):
         log.info("building '{ext.name}' extension")
@@ -143,9 +140,9 @@ class LibraryCommand (BuildCommandMixin, build_clib):
             libraries[idx] = self._legacy_check_library(library)
 
     def build_libraries (self, libraries):
-        for library in libraries:
-            self.build_library(library)
-        self.build()
+        with self.build():
+            for library in libraries:
+                self.build_library(library)
 
     def build_library (self, library: Library):
         log.info(f"building in '{library.name}'")

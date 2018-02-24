@@ -8,7 +8,6 @@ import pytest
 class ExtensionCommandDummy (ExtensionCommand):
     def compile (self, info): assert True
     def target (self, info): pass
-    def build (self, info): pass
 
 @pytest.fixture(params=[ExtensionCommandDummy])
 def command (request):

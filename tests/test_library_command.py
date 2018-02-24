@@ -8,7 +8,6 @@ import pytest
 class LibraryCommandDummy (LibraryCommand):
     def compile (self, info): pass
     def target (self, info): pass
-    def build (self): pass
 
 class LibraryCommandCompiled (LibraryCommand):
     def compile (self, info):
@@ -17,16 +16,12 @@ class LibraryCommandCompiled (LibraryCommand):
         assert info.inputs[0].suffix in ('.c', '.cxx', '.cpp', '.cc')
         assert info.output.suffix in ('.o', '.obj')
     def target (self, info): pass
-    def build (self): pass
-
 class LibraryCommandBuild (LibraryCommand):
     def compile (self, info):
         assert True
 
     def target (self, info):
         assert True
-
-    def build (self): pass
 
 @pytest.fixture
 def dummy ():

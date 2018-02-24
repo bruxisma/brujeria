@@ -1,5 +1,6 @@
 from distutils.errors import DistutilsOptionError
 from collections.abc import Iterable
+from contextlib import contextmanager
 from argparse import ArgumentParser
 from pathlib import Path
 from typing import Text, List, Union
@@ -45,8 +46,8 @@ class BuildCommandMixin (ABC):
         info = _parse_cmd(cmd, self.is_posix, self.parser)
         self.target(info)
 
-    @abstractmethod
-    def build (self): pass
+    @contextmanager
+    def build (self): yield
 
     @abstractmethod
     def compile (self, info: BuildInfo): pass
@@ -105,7 +106,8 @@ class BuildNinjaMixin(ABC):
         target = Target('target', info.output, inputs=info.inputs)
         self.writer.append(target)
 
-    def build (self, info: BuildInfo):
+    def build (self):
+        yield
         self.writer.close()
         ninja_program = Path(ninja.BIN_DIR) / 'ninja'
         try: subprocess.check_call([ninja_program, '-f', self.writer.filename])
