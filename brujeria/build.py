@@ -25,7 +25,16 @@ class _MSVCCompileAction(Action):
 
 class _MSVCLinkAction(Action):
     def __call__(self, _, namespace, values, option):
+        print('build.py:28', namespace, values, option)
         if option == '/O' and values[:3] != 'UT:': return
+        if option == '/L' and values[:7] != 'IBPATH:': return
+        if option == '/L':
+            print('build.py:30', namespace, self.dest)
+            print('build.py:31', getattr(namespace, self.dest))
+            paths = getattr(namespace, self.dest)
+            paths.append(Path(values[7:]))
+            print('build.py:36', paths)
+            return setattr(namespace, self.dest, paths)
         setattr(namespace, self.dest, Path(values[3:]))
 
 def _set_unix_parser (parser: ArgumentParser):
@@ -40,6 +49,7 @@ def _set_msvc_compile_parser(parser: ArgumentParser):
 def _set_msvc_link_parser (parser: ArgumentParser):
     parser.prefix_chars = '/'
     parser.add_argument('/O', dest='output', action=_MSVCLinkAction)
+    parser.add_argument('/L', dest='includes', action=_MSVCLinkAction, default=[])
     parser.add_argument('inputs', type=Path, nargs='+')
 
 def _create_compile_parser (is_posix: bool) -> ArgumentParser:
@@ -63,7 +73,6 @@ def patch (obj, attr, value):
     setattr(obj, attr, value)
     try: yield
     finally: setattr(obj, attr, original)
-
 class ExtensionCommand (BuildCommandMixin, build_ext):
 
     def _link (self, compiler, *args, **kwargs):
@@ -73,10 +82,10 @@ class ExtensionCommand (BuildCommandMixin, build_ext):
 
     def build_extensions (self):
         self.check_extensions_list(self.extensions)
-        with self.build():
-            for ext in self.extensions:
-                with self._filter_build_errors(ext):
-                    self.build_extension(ext)
+        # TODO: This 'begin' and 'end' system is a travesty and needs to be better
+        for ext in self.extensions:
+            with self.build(), self._filter_build_errors(ext):
+                self.build_extension(ext)
 
     def build_extension(self, ext: Extension):
         log.info("building '{ext.name}' extension")
@@ -85,7 +94,7 @@ class ExtensionCommand (BuildCommandMixin, build_ext):
         with patch(self, 'current_target', ext):
             with patch(self.compiler, 'spawn', self._compile):
                 with patch(self.compiler, 'link', self._link):
-                    with patch(self.compiler, 'force', True):
+                    with patch(self, 'force', True):
                         super().build_extension(ext)
 
 class LibraryCommand (BuildCommandMixin, build_clib):
@@ -141,8 +150,8 @@ class LibraryCommand (BuildCommandMixin, build_clib):
             libraries[idx] = self._legacy_check_library(library)
 
     def build_libraries (self, libraries):
-        with self.build():
-            for library in libraries:
+        for library in libraries:
+            with self.build():
                 self.build_library(library)
 
     def build_library (self, library: Library):
