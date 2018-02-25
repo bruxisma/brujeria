@@ -33,7 +33,7 @@ def _set_unix_parser (parser: ArgumentParser):
     parser.add_argument('inputs', type=Path, nargs='+')
 
 def _set_msvc_compile_parser(parser: ArgumentParser):
-    parser.prefix_chars = '/'
+    parser.prefix_chars = '/-'
     parser.add_argument('/T', dest='inputs', action=_MSVCInputsAction)
     parser.add_argument('/F', dest='output', action=_MSVCCompileAction)
 
@@ -46,6 +46,7 @@ def _create_compile_parser (is_posix: bool) -> ArgumentParser:
     parser = ArgumentParser()
     if is_posix: _set_unix_parser(parser)
     else: _set_msvc_compile_parser(parser)
+    parser.add_argument('-I', dest='includes', type=Path, action='append')
     return parser
 
 def _create_link_parser (is_posix: bool) -> ArgumentParser:

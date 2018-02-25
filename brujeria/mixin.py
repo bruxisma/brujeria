@@ -11,12 +11,13 @@ import shlex
 import ninja
 
 from .target import Library, Extension
-from .generate import Writer, Rule, Target
+from .ast import Ninja, Rule, Target
 
 class BuildInfo:
-    def __init__ (self, command: Text, inputs: List[Text], output: Text, args: List[Text]):
+    def __init__ (self, command: Text, inputs: List[Text], output: Text, includes: List[Path], args: List[Text]):
         self.command = Path(command)
         self.inputs = list(map(Path, inputs))
+        self.includes = includes
         self.output = Path(output)
         self.args = args
 
@@ -28,7 +29,8 @@ def _parse_cmd (cmd: Text, is_posix: bool, parser: ArgumentParser) -> BuildInfo:
     args, remainder = parser.parse_known_args(arguments)
     if not args.inputs and not args.output:
         raise DistutilsOptionError(f'Could not extract source and output arguments for {BuildInfo.__qualname__}')
-    return BuildInfo(exe_path, args.inputs, args.output, remainder)
+    if not hasattr(args, 'includes'): setattr(args, 'includes', [])
+    return BuildInfo(exe_path, args.inputs, args.output, args.includes, remainder)
 
 class BuildCommandMixin (ABC):
 
@@ -60,29 +62,29 @@ class BuildCommandMixin (ABC):
 
 class BuildNinjaMixin(ABC):
 
-    writer: Writer
+    writer: Ninja
 
-    def __init__ (self):
-        super().__init__()
+    def __init__ (self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self.writer = None
 
     def _create_writer (self, name: Text):
         if self.writer: return
-        ninja_file = Path(self.build_temp) / f'build.{self.current.name}.ninja'
-        self.writer = Writer(ninja_file)
+        self.writer = Ninja(f'{self.build_temp}/{self.current_target.name}')
 
+    # XXX: This function is hot trash. Make it better
     def _create_compile_rule(self, info: BuildInfo) -> Rule:
         depfile = '$out.d'
-        output = '-o'
+        output = '-o $out'
         deps = 'gcc'
         inputs = ['$in']
         if not self.is_posix:
             depfile = None
-            output = '/Fo'
+            output = '/Fo$out'
             input_flag = '/Tc' if info.inputs[0].suffix == '.c' else '/Tp'
             inputs = [input_flag, '$in']
             deps = 'msvc'
-        command = [info.command, *inputs, output, '$out', *info.args]
+        command = [info.command, *inputs, output, *info.args, *info.includes]
         return Rule('compile', command, depfile=depfile, deps=deps)
 
     def _create_target_rule (self, info: BuildInfo) -> Rule:
@@ -106,11 +108,12 @@ class BuildNinjaMixin(ABC):
         target = Target('target', info.output, inputs=info.inputs)
         self.writer.append(target)
 
+    @contextmanager
     def build (self):
         yield
         self.writer.close()
         ninja_program = Path(ninja.BIN_DIR) / 'ninja'
-        try: subprocess.check_call([ninja_program, '-f', self.writer.filename])
+        try: subprocess.check_call([str(ninja_program), '-f', str(self.writer.path)])
         except subprocess.CalledProcessError as e:
             # TODO: log this somewhere if possible
             raise e
