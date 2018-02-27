@@ -31,6 +31,7 @@ class Ninja:
     def close (self):
         with open(self.path, 'w') as build:
             build.write(_format_list(self.rules, sep='\n'))
+            build.write('\n')
             build.write(_format_list(self.items, sep='\n'))
             build.write('\n')
             build.flush()
@@ -146,7 +147,7 @@ class Target:
         implicit_outputs = _format_list(self.implicit_outputs, sep=' ', prefix='|')
         order_only = _format_list(self.order_only, sep=' ', prefix='||')
         variables = textwrap.indent(_format_list(self.variables, sep='\n', prefix='\n'), ' ')
-        return f'build {outputs} {implicit_outputs}: {rule} {inputs}{implicit}{order_only}{variables}'
+        return f'build {outputs}{implicit_outputs}: {rule} {inputs}{implicit}{order_only}{variables}'
 
 class Alias:
     def __init__ (self, name, target):

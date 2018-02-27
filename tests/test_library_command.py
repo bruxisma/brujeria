@@ -39,9 +39,9 @@ def target ():
     return LibraryCommandBuild(distribution)
 
 @pytest.fixture
-def build_dummy (dummy, library, tmpdir_factory):
+def build_dummy (dummy, library, tempdir):
     dummy.libraries = [library]
-    dummy.build_temp = dummy.build_clib = str(tmpdir_factory)
+    dummy.build_temp = dummy.build_clib = tempdir
     dummy.finalize_options()
     return dummy
 
@@ -53,9 +53,9 @@ def legacy_invalid_sources ():
 def legacy_valid_sources ():
     return [('example', dict(sources=['broken.c']))]
 
-def setup_build_library (command, library, tmpdir_factory):
+def setup_build_library (command, library, tempdir):
     command.libraries = [library]
-    command.build_temp = command.build_clib = str(tmpdir_factory)
+    command.build_temp = command.build_clib = tempdir
     command.finalize_options()
 
 class TestLibraryCommand:
@@ -67,10 +67,8 @@ class TestLibraryCommand:
         dummy.check_library_list(legacy_valid_sources)
         assert isinstance(legacy_valid_sources[0], Library)
 
-    def test_legacy_build_library_compile (self, dummy, legacy_valid_sources, tmpdir_factory):
-        dummy.libraries = legacy_valid_sources
-        dummy.build_temp = dummy.build_clib = str(tmpdir_factory)
-        dummy.finalize_options()
+    def test_legacy_build_library_compile (self, dummy, legacy_valid_sources, tempdir):
+        setup_build_library(dummy, legacy_valid_sources, tempdir)
         dummy.run()
 
     def test_get_library_names (self, dummy, library, libraries):
@@ -84,9 +82,9 @@ class TestLibraryCommand:
         for source in library.sources:
             assert source in sources
 
-    def test_build_library_compile (self, build_dummy):
+    def test_build_library_sources (self, build_dummy):
         build_dummy.run()
 
-    def test_build_library_target (self, target, library, tmpdir):
-        setup_build_library(target, library, tmpdir)
+    def test_build_library (self, target, library, tempdir):
+        setup_build_library(target, library, tempdir)
         target.run()

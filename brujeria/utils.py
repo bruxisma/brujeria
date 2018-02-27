@@ -5,10 +5,13 @@ from typing import List, Text
 
 from .ast import Rule
 
+def _escape_path (filepath: Path) -> Path:
+    return Path(str(filepath).replace(' ', '$ ').replace(':', '$:'))
+
 class BuildInfo:
     def __init__ (self, command, inputs, output, includes, args):
         self.command = Path(command)
-        self.inputs = list(map(Path, inputs))
+        self.inputs = list(map(_escape_path, inputs))
         self.includes = includes
         self.output = Path(output)
         self.args = args
@@ -24,6 +27,7 @@ def _parse_cmd (cmd: List[Text], parser: ArgumentParser) -> BuildInfo:
     if not hasattr(args, 'includes'): setattr(args, 'includes', [])
     return BuildInfo(exe_path, args.inputs, args.output, args.includes, remainder)
 
+# TODO: Move to rspfile...
 def _create_compile_rule (info: BuildInfo, is_posix: bool) -> Rule:
     depfile = '$out.d'
     output = '-o $out'
@@ -40,6 +44,7 @@ def _create_compile_rule (info: BuildInfo, is_posix: bool) -> Rule:
     command = [f'{info.command} $\n', *inputs, output, *info.args, includes]
     return Rule('compile', command, depfile=depfile, deps=deps)
 
+# TODO: Move to rspfile...
 def _create_target_rule (info: BuildInfo, is_posix: bool) -> Rule:
     output = ['-o', '$out']
     includes = ''

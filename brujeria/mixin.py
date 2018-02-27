@@ -48,19 +48,23 @@ class BuildNinjaMixin(ABC):
 
     def __init__ (self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self._compile_rule_created = False
         self.writer = None
 
     def _create_writer (self, name: Text):
         if self.writer: return
         self.writer = Ninja(f'{self.build_temp}/{self.current_target.name}')
 
+    def _create_compile_rule (self, info: BuildInfo):
+        if self._compile_rule_created: return
+        self.writer.append(_create_compile_rule(info, self.is_posix))
+        self._compile_rule_created = True
+
     def compile (self, info: BuildInfo):
         if self.is_posix: info.add_arguments('-MMD', '-MF', '$out.d')
         else: info.add_arguments('/showIncludes')
         self._create_writer(self.current_target.name)
-        # TODO: Clean this up. This is wasteful and we are unnecessarily
-        # creating an object every time
-        self.writer.append(_create_compile_rule(info, self.is_posix))
+        self._create_compile_rule(info)
         target = Target('compile', info.output, inputs=info.inputs)
         self.writer.append(target)
 

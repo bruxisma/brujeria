@@ -159,7 +159,7 @@ class LibraryCommand (BuildCommandMixin, build_clib):
         self.parser = _create_compile_parser(self.is_posix)
         with patch(self, 'current_target', library):
             with patch(self.compiler, 'spawn', self._compile):
-                with patch(self.compiler, 'force', True):
+                with patch(self, 'force', True):
                     objects = self.compiler.compile(
                         library.sources,
                         output_dir=self.build_temp,

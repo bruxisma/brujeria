@@ -1,0 +1,5 @@
+#include <Python.h>
+
+%for method in methods:
+PyObject* ${module}_${method} (PyObject*, PyObject*);
+%endfor
