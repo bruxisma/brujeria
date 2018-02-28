@@ -13,7 +13,7 @@ import pytest
 class Generator:
     '''Quickly slapped together 'data' generator. Integrating tools like
     Faker, etc. is too much, and we'd have to do this work anyway, since this
-    approach hasn't been done yet.
+    approach (i.e., generating randomly named modules) hasn't been done yet.
     '''
 
     def __init__ (self, start=4, stop=13):
@@ -115,7 +115,7 @@ def module (exttmpdir, extfunc, extheader, extinit):
 
         header_path.write_text(extheader(**module_info))
         init_path.write_text(extinit(**module_info))
-        
+
         for path in paths:
             func_info = dict(module=name, method=path.stem)
             path.write_text(extfunc(**func_info))

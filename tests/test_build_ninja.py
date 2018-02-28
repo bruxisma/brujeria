@@ -22,8 +22,9 @@ def module (module):
         script_args='build',
         cmdclass=dict(build_ext=build_ninja_ext))
     dist = Distribution(options)
-    assert dist.ext_modules
-    return build_ninja_ext(dist)
+    mod = build_ninja_ext(dist)
+    mod.finalize_options()
+    return mod
 
 class TestNinjaExt:
 
@@ -36,7 +37,6 @@ class TestNinjaExt:
         ext.run()
 
     def test_ninja_ext_module (self, module: build_ninja_ext):
-        module.finalize_options()
         module.run()
 
 class TestNinjaLib:
