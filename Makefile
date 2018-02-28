@@ -7,6 +7,9 @@ test:
 build:
 	@python setup.py build
 
+clean:
+	@python setup.py clean
+
 all: build docs test 
 
 .PHONY: help docs test build
