@@ -25,15 +25,11 @@ class _MSVCCompileAction(Action):
 
 class _MSVCLinkAction(Action):
     def __call__(self, _, namespace, values, option):
-        print('build.py:28', namespace, values, option)
         if option == '/O' and values[:3] != 'UT:': return
         if option == '/L' and values[:7] != 'IBPATH:': return
         if option == '/L':
-            print('build.py:30', namespace, self.dest)
-            print('build.py:31', getattr(namespace, self.dest))
             paths = getattr(namespace, self.dest)
             paths.append(Path(values[7:]))
-            print('build.py:36', paths)
             return setattr(namespace, self.dest, paths)
         setattr(namespace, self.dest, Path(values[3:]))
 
@@ -88,7 +84,7 @@ class ExtensionCommand (BuildCommandMixin, build_ext):
                 self.build_extension(ext)
 
     def build_extension(self, ext: Extension):
-        log.info("building '{ext.name}' extension")
+        log.info(f"building '{ext.name}' extension")
         self.parser = _create_compile_parser(self.is_posix)
         # Technically we could put these all in one with statement, but honestly, it's just not worth it
         with patch(self, 'current_target', ext):
