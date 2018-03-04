@@ -9,6 +9,19 @@ provides a minimal `ninja`_ based build generator, and also provides an import
 hook for lazy building and importing of native extensions a-la `cppimport`_,
 while still permitting user-defined build systems.
 
+Features
+--------
+
+Currently, Brujería provides the following:
+
+ * build_ninja_clib and build_ninja_ext command classes for setuptools' setup
+ * LibraryCommand and ExtensionCommand base classes for implementing custom
+   command classes
+ * import hooks to permit automatic importing and building of C++ extensions
+ * Optional monkey patching to use logbook over the builtin distutils.log
+   interfaces, while retaining API compatibility.
+ * A basic ninja file generator, separate from ``ninja_syntax.py``
+
 Why the name?
 -------------
 
