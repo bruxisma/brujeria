@@ -10,6 +10,7 @@ import brujeria.log
 
 import subprocess
 import ninja
+import os
 
 from .target import Library, Extension
 from .utils import BuildInfo, _parse_cmd
@@ -80,8 +81,24 @@ class BuildNinjaMixin(ABC):
         yield
         self.writer.close()
         ninja_program = Path(ninja.BIN_DIR) / 'ninja'
-        try: subprocess.check_call([str(ninja_program), '-f', str(self.writer.path)])
-        except subprocess.CalledProcessError as e:
-            # TODO: log this somewhere if possible
-            raise e
-
+        env = os.environ
+        if not self.is_posix:
+            # Add vcvarsall.bat to execution
+            from distutils._msvccompiler import PLAT_TO_VCVARS, _get_vc_env
+            from distutils.util import get_platform
+            env = _get_vc_env(PLAT_TO_VCVARS[get_platform()])
+        cmd = [str(ninja_program), '-f', str(self.writer.path)]
+        import sys
+        process = subprocess.Popen(cmd,
+            env=env,
+            universal_newlines=True,
+            stdout=sys.stdout, #subprocess.PIPE,
+            stderr=sys.stderr)#subprocess.PIPE)
+        out, err = process.communicate()
+        if process.returncode != 0:
+            raise subprocess.CalledProcessError(
+                process.returncode,
+                cmd,
+                output=out,
+                stderr=err)
+        if out: print(out, end='')
