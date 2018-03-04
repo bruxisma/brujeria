@@ -5,6 +5,8 @@ from argparse import ArgumentParser
 from pathlib import Path
 from typing import Text, List, Union
 from abc import ABC, abstractmethod
+from distutils import log
+import brujeria.log
 
 import subprocess
 import ninja

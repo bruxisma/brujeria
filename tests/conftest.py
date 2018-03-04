@@ -1,4 +1,7 @@
-from brujeria import Distribution, Extension, Library, setup as setuptools
+from brujeria import Distribution, Extension, Library
+from brujeria import use_logbook
+from brujeria import setup as setuptools
+from brujeria.utils import _xdg_cache_home
 
 from collections import ChainMap
 from functools import lru_cache, partial
@@ -75,9 +78,14 @@ def template (tempdir):
         module_directory=str(Path(tempdir).joinpath('template')))
 
 @pytest.fixture(scope='session')
-def exttmpdir (tempdir):
+def cache_home ():
+    '''returns $XDG_CACHE_HOME/brujeria-tests/'''
+    return _xdg_cache_home() / 'brujeria-tests'
+
+@pytest.fixture(scope='session')
+def exttmpdir (cache_home):
     '''returns temporary directory to place extension files into'''
-    return Path(tempdir).joinpath('extensions')
+    return Path(cache_home).joinpath('extensions')
 
 @pytest.fixture()
 def extdatadir (shared_datadir):
@@ -148,9 +156,14 @@ def pytest_addoption (parser):
         metavar='SEED',
         default=42, # TODO: Change to the current time for CI
         help='Seed value for data generation')
+    parser.addoption('--use-logbook-override',
+        action='store_true',
+        default=True,
+        help='Use logbook monkey patch')
 
 def pytest_configure (config):
     seed(config.getoption('--generator-seed'))
+    if config.getoption('--use-logbook-override'): use_logbook()
 
 # TODO: Generate fake legacy library 2-tuples
 # (then selectively match or skip for params based on some kind of schema)
