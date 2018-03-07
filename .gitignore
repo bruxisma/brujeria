@@ -5,7 +5,7 @@ __pycache__/
 *$py.class
 *.so
 .Python
-build/
+/build
 develop-eggs/
 dist/
 downloads/
@@ -17,6 +17,7 @@ parts/
 sdist/
 var/
 wheels/
+*.dist-info/
 *.egg-info/
 .installed.cfg
 *.egg
