@@ -1,4 +1,4 @@
-from brujeria.build import ExtensionCommand
+from brujeria.command.base import ExtensionCommand
 from brujeria import Distribution, Extension
 from random import seed, choices, randrange
 from string import ascii_lowercase

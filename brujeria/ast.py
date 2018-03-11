@@ -35,9 +35,6 @@ class Ninja:
             build.write(_format_list(self.items, sep='\n'))
             build.write('\n')
             build.flush()
-            #self.path.write_text(buffer.getvalue())
-        #self.path.write_text(f'{self}'')
-        #self.path.write_text(_format_list(self.items, sep='\n'))
         pass
 
     def append (self, item):
@@ -114,17 +111,6 @@ class Rule:
         ]
         return textwrap.indent(_format_list(filter(None, variables), sep='\n', prefix='\n'), ' ')
 
-
-#class Command:
-#    def __init__ (self, info):
-#        self.inputs = info.inputs
-#        self.includes = _format_list(info.includes, 
-#        self.command = command
-#
-#    def __format__ (self, format_spec):
-#        pass
-
-
 class Target:
 
     def __init__ (self, rule: Text, outputs, **kwargs):
@@ -149,16 +135,6 @@ class Target:
         variables = textwrap.indent(_format_list(self.variables, sep='\n', prefix='\n'), ' ')
         return f'build {outputs}{implicit_outputs}: {rule} {inputs}{implicit}{order_only}{variables}'
 
-class Alias:
-    def __init__ (self, name, target):
-        self.name = name
-        self.target = target
-
-    def __repr__ (self): return f'<Alias: {self.target} as {self.name}>'
-
-    def __format__ (self, format_spec):
-        return f'build {self.name}: phony {self.target}'
-
 class Variable:
     def __init__ (self, key, value):
         self.key = key
@@ -174,10 +150,3 @@ class Variable:
     def __format__ (self, format_spec):
         if self.value is None: return ''
         return f'{self.key} = {self.value}'
-
-class Pool:
-    def __init__ (self, name, depth):
-        self.name = name
-        self.depth = depth
-
-    def __repr__ (self): return f'<Pool: {self.name}:{self.depth}>'

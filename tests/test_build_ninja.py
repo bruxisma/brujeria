@@ -1,4 +1,5 @@
-from brujeria.command import build_ninja_ext, build_ninja_clib
+from brujeria.command.ninja import BuildNinjaExt as build_ninja_ext
+from brujeria.command.ninja import BuildNinjaLib as build_ninja_clib
 from brujeria import Distribution, Library, Extension, setup as setuptools
 import pytest
 import pdb
@@ -7,7 +8,7 @@ import pdb
 def clib ():
     dist = Distribution()
     return build_ninja_clib(dist)
-
+ 
 @pytest.fixture
 def ext ():
     dist = Distribution()

@@ -1,7 +1,8 @@
 from brujeria import Distribution, Extension, Library
 from brujeria import use_logbook
 from brujeria import setup as setuptools
-from brujeria.utils import _xdg_cache_home
+
+from brujeria.core import xdg
 
 from collections import ChainMap
 from functools import lru_cache, partial
@@ -80,7 +81,7 @@ def template (tempdir):
 @pytest.fixture(scope='session')
 def cache_home ():
     '''returns $XDG_CACHE_HOME/brujeria-tests/'''
-    return _xdg_cache_home() / 'brujeria-tests'
+    return xdg.CACHE_HOME / 'brujeria-tests'
 
 @pytest.fixture(scope='session')
 def exttmpdir (cache_home):

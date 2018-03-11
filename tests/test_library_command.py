@@ -1,4 +1,4 @@
-from brujeria.build import LibraryCommand
+from brujeria.command.base import LibraryCommand
 from brujeria import Distribution, Library
 
 from distutils.errors import DistutilsSetupError

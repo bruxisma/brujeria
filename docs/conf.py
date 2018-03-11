@@ -13,7 +13,6 @@ extensions = [
     'sphinx.ext.todo',
 ]
 
-templates_path = ['_templates']
 source_suffix = '.rst'
 master_doc = 'index'
 
@@ -21,7 +20,6 @@ language = None
 exclude_patterns = []
 pygments_style = 'sphinx'
 html_theme = 'sphinx_rtd_theme'
-html_static_path = ['_static']
 
 extlinks = {
     'github': ('https://github.com/%s', ''),

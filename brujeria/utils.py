@@ -7,12 +7,7 @@ import os
 from .ast import Rule
 
 def _escape_path (filepath: Path) -> Path:
-    return Path(str(filepath).replace(' ', '$ ').replace(':', '$:'))
-
-def _xdg_cache_home ():
-    if os.name == 'nt' and not os.environ.get('XDG_CACHE_HOME'):
-        os.environ['XDG_CACHE_HOME'] = os.environ['LOCALAPPDATA']
-    return Path(os.environ.get('XDG_CACHE_HOME', Path.home() / '.cache'))
+    return Path(os.fspath(filepath).replace(' ', '$ ').replace(':', '$:'))
 
 class BuildInfo:
     def __init__ (self, command, inputs, output, includes, args):
@@ -49,6 +44,7 @@ def _create_compile_rule (info: BuildInfo, is_posix: bool) -> Rule:
     content = '\n'.join([args, includes])
     return Rule('compile', command,
         depfile=depfile,
+        description='CXX $in -> $out',
         deps=deps,
         rspfile='$out.rsp',
         rspfile_content=content)
@@ -59,7 +55,15 @@ def _create_target_rule (info: BuildInfo, is_posix: bool) -> Rule:
     if not is_posix:
         output = ['/OUT:$out']
         includes = ' $\n'.join([f'/LIBPATH:"{include}"' for include in info.includes])
+        print('inputs: ', info.inputs)
+        libs = list(map(str, filter(lambda x: x.suffix != '.obj', info.inputs)))
+        info.inputs = list(filter(lambda x: x.suffix == '.obj', info.inputs))
+        info.args.extend(libs)
+
     args = '{} $'.format(' $\n'.join(info.args))
     content = '\n'.join([args, '$in_newline $', includes])
     command = [f'{info.command} $\n', *output, '@$out.rsp']
-    return Rule('target', command, rspfile='$out.rsp', rspfile_content=content)
+    return Rule('target', command,
+        description='LINK $out',
+        rspfile='$out.rsp',
+        rspfile_content=content)

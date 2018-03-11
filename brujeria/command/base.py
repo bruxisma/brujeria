@@ -12,8 +12,10 @@ from pathlib import Path
 from typing import Tuple, Text, List
 from types import MethodType
 
+from ..core import patch
+
 from .mixin import BuildCommandMixin
-from .target import Extension, Library
+from ..target import Extension, Library
 from .mixin import BuildNinjaMixin
 
 class _MSVCInputsAction(Action):
@@ -63,24 +65,15 @@ def _create_link_parser (is_posix: bool) -> ArgumentParser:
     else: _set_msvc_link_parser(parser)
     return parser
 
-@contextmanager
-def patch (obj, attr, value):
-    assert not isinstance(obj, type)
-    if callable(value): value = MethodType(value, obj)
-    original = getattr(obj, attr)
-    setattr(obj, attr, value)
-    try: yield
-    finally: setattr(obj, attr, original)
 class ExtensionCommand (BuildCommandMixin, build_ext):
 
     def _link (self, compiler, *args, **kwargs):
         self.parser = _create_link_parser(self.is_posix)
-        with patch(self.compiler, 'spawn', self._target):
+        with patch.method(self.compiler, 'spawn', self._target):
             type(self.compiler).link(compiler, *args, **kwargs)
 
     def build_extensions (self):
         self.check_extensions_list(self.extensions)
-        # TODO: This 'begin' and 'end' system is a travesty and needs to be better
         for ext in self.extensions:
             with self.build(), self._filter_build_errors(ext):
                 self.build_extension(ext)
@@ -88,11 +81,12 @@ class ExtensionCommand (BuildCommandMixin, build_ext):
     def build_extension(self, ext: Extension):
         log.info(f"building '{ext.name}' extension")
         self.parser = _create_compile_parser(self.is_posix)
-        # Technically we could put these all in one with statement, but honestly, it's just not worth it
-        with patch(self, 'current_target', ext):
-            with patch(self.compiler, 'spawn', self._compile):
-                with patch(self.compiler, 'link', self._link):
-                    with patch(self, 'force', True):
+        # Technically we could put these all in one with statement, but
+        # honestly, it's just not worth it
+        with patch.attribute(self, 'current_target', ext):
+            with patch.method(self.compiler, 'spawn', self._compile):
+                with patch.method(self.compiler, 'link', self._link):
+                    with patch.attribute(self, 'force', True):
                         super().build_extension(ext)
 
 class LibraryCommand (BuildCommandMixin, build_clib):
@@ -155,9 +149,9 @@ class LibraryCommand (BuildCommandMixin, build_clib):
     def build_library (self, library: Library):
         log.info(f"building in '{library.name}'")
         self.parser = _create_compile_parser(self.is_posix)
-        with patch(self, 'current_target', library):
-            with patch(self.compiler, 'spawn', self._compile):
-                with patch(self, 'force', True):
+        with patch.attribute(self, 'current_target', library):
+            with patch.method(self.compiler, 'spawn', self._compile):
+                with patch.attribute(self, 'force', True):
                     objects = self.compiler.compile(
                         library.sources,
                         output_dir=self.build_temp,
@@ -166,7 +160,7 @@ class LibraryCommand (BuildCommandMixin, build_clib):
                         extra_postargs=library.extra_compile_args or [],
                         debug=self.debug)
             self.parser = _create_link_parser(self.is_posix)
-            with patch(self.compiler, 'spawn', self._target):
+            with patch.method(self.compiler, 'spawn', self._target):
                 self.compiler.create_static_lib(
                     objects,
                     library.name,
