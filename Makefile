@@ -1,4 +1,4 @@
 $(MAKECMDGOALS):
-	@python setup.py $@ $(ARGS)
+	@pipenv run setup.py $@ $(ARGS)
 
 .PHONY: $(MAKECMDGOALS)
