@@ -1,3 +1,5 @@
+#pylint: disable=no-name-in-module,import-error
+#pylint: disable=E1101
 from logbook.more import ColorizingStreamHandlerMixin, ColorizedStderrHandler
 from logbook import Logger, StderrHandler, StreamHandler
 from functools import partialmethod

@@ -14,6 +14,7 @@ pytest = "*"
 pytest-runner = "*"
 pytest-logbook = "*"
 pytest-datadir = "*"
+pylint = "*"
 
 [requires]
 python_version = "3.6"

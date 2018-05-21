@@ -1,11 +1,16 @@
+#pylint: disable=no-name-in-module,import-error
 from distutils.errors import DistutilsFileError, DistutilsOptionError
 from distutils import log
+import distutils
 
 from setuptools import Command
 from itertools import chain
 from pathlib import Path
 
+from ..core import platform
+
 import shutil
+import stat
 import os
 
 class PurgeCommand(Command):
@@ -13,12 +18,12 @@ class PurgeCommand(Command):
 
     description = 'A stronger version of clean'
     user_options = [
-        ('match=', 'm', 'patterns to glob (default: *.egg-info, *.dist-info)'),
+        ('match=', 'm', 'patterns to glob (default: **/*.egg-info, *.dist-info)'),
         ('items=', 'i', 'dirs to remove (default: .eggs, .pytest_cache, build, dist)'),
     ]
 
     def initialize_options (self):
-        self.match = ['*.egg-info', '*.dist-info']
+        self.match = ['**/*.egg-info', '*.dist-info']
         self.items = ['.eggs', '.pytest-cache', 'build', 'dist']
 
     def finalize_options (self):
@@ -27,6 +32,12 @@ class PurgeCommand(Command):
             raise DistutilsOptionError(error.format('glob patterns'))
         if not self.items:
             raise DistutilsOptionError(error.format('directories'))
+
+    def _remove_readonly (self, func, path, exc_info):
+        '''Lets rmtree act like a true and proper `rm -rf` on all platforms'''
+        if platform.windows(): os.chmod(path, stat.S_IWRITE)
+        elif not os.access(path, os.W_OK): os.chmod(path, stat.S_IWUSR)
+        func(path)
 
     def run (self):
         current = Path()
@@ -39,5 +50,6 @@ class PurgeCommand(Command):
                 continue
             log.info(f'Deleting {path}')
             if self.dry_run: continue
-            if path.is_dir(): shutil.rmtree(path)
+            if path.is_dir():
+                shutil.rmtree(path, onerror=self._remove_readonly)
             else: os.unlink(path)
