@@ -1,7 +1,7 @@
 include Readme.rst
 graft tests
 graft docs
+graft src
 
 global-exclude *.py[cd] .DS_Store .ninja_deps .ninja_log
-global-exclude *.lib *.exp *.obj *.so *.o
-global-exclude *.ninja
+global-exclude *.lib *.exp *.obj *.so *.o .eggs

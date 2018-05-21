@@ -1,13 +1,15 @@
-from brujeria.command.base import ExtensionCommand
+from brujeria.command.mixin import ExtensionCommandMixin, build_ext
 from brujeria import Distribution, Extension
 from random import seed, choices, randrange
 from string import ascii_lowercase
 
 import pytest
 
-class ExtensionCommandDummy (ExtensionCommand):
-    def compile (self, info): assert True
-    def target (self, info): pass
+class ExtensionCommandDummy (ExtensionCommandMixin, build_ext):
+    def on_compile (self, info): assert True
+    def on_target (self, info): pass
+    def on_build_begin (self): pass
+    def on_build_end (self): pass
 
 @pytest.fixture(params=[ExtensionCommandDummy])
 def command (request):

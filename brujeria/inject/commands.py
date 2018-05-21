@@ -1,1 +1,0 @@
-'''Patches build_clib and build_ext'''

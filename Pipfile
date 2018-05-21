@@ -1,0 +1,19 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+colorama = {version = "*", sys_platform = "== 'win32'"}
+logbook = "*"
+cmake = "*"
+ninja = "*"
+
+[dev-packages]
+pytest = "*"
+pytest-runner = "*"
+pytest-logbook = "*"
+pytest-datadir = "*"
+
+[requires]
+python_version = "3.6"

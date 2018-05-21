@@ -1,6 +1,0 @@
-#include "${module}.h"
-
-PyObject* ${module}_${method} (PyObject*, PyObject*) {
-  PyErr_SetString(PyExc_NotImplementedError, "${method} is not implemented");
-  return nullptr;
-}

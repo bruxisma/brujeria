@@ -1,5 +1,5 @@
-from brujeria import Distribution, Extension, Library
-from brujeria import use_logbook
+from brujeria import Distribution, Extension
+from brujeria.core.log import use_logbook
 from brujeria import setup as setuptools
 
 from brujeria.core import xdg
@@ -9,8 +9,6 @@ from functools import lru_cache, partial
 from pathlib import Path
 from random import seed, choices, choice, randint
 from string import ascii_lowercase
-
-from mako.template import Template
 
 import pytest
 
@@ -51,11 +49,6 @@ class Generator:
         return { self.name: list(self.filenames) }
 
     @property
-    def libraries (self):
-        targets = dict(ChainMap(*[self.target for _ in range(self.integer)]))
-        return [Library(name, sources) for name, sources in targets.items()]
-
-    @property
     def extensions (self):
         targets = dict(ChainMap(*[self.target for _ in range(self.integer)]))
         return [Extension(name, sources) for name, sources in targets.items()]
@@ -70,14 +63,6 @@ class Generator:
         if value <= self.start: raise AttributeError('Cannot invalidate range')
         self._stop = value
 
-#XXX: cmdclass = dict(build_clib=libcommand, build_ext=extcommand)
-
-@pytest.fixture(scope='session')
-def template (tempdir):
-    return partial(
-        Template,
-        module_directory=str(Path(tempdir).joinpath('template')))
-
 @pytest.fixture(scope='session')
 def cache_home ():
     '''returns $XDG_CACHE_HOME/brujeria-tests/'''
@@ -87,26 +72,6 @@ def cache_home ():
 def exttmpdir (cache_home):
     '''returns temporary directory to place extension files into'''
     return Path(cache_home).joinpath('extensions')
-
-@pytest.fixture()
-def extdatadir (shared_datadir):
-    '''returns "data/ext"'''
-    return shared_datadir / 'ext'
-
-@pytest.fixture()
-def extfunc (template, extdatadir):
-    '''returns render functions for "data/ext/function.cxx.in"'''
-    return template(filename=str(extdatadir / 'function.cxx.in')).render
-
-@pytest.fixture()
-def extheader (template, extdatadir):
-    '''returns render function for "data/ext/header.h.in"'''
-    return template(filename=str(extdatadir / 'header.h.in')).render
-
-@pytest.fixture()
-def extinit (template, extdatadir):
-    '''returns render function for "data/ext/init.cxx.in"'''
-    return template(filename=str(extdatadir / 'init.cxx.in')).render
 
 @pytest.fixture
 def module (exttmpdir, extfunc, extheader, extinit):
@@ -134,15 +99,9 @@ def module (exttmpdir, extfunc, extheader, extinit):
 
 @pytest.fixture(scope='session')
 @lru_cache(maxsize=1)
-def libraries ():
-    generator = Generator()
-    return generator.libraries
-
-@pytest.fixture(scope='session')
-@lru_cache(maxsize=1)
 def extensions ():
     generator = Generator()
-    return generator.libraries
+    return generator.extensions
 
 @pytest.fixture(scope='session')
 def tempdir (tmpdir_factory): return str(tmpdir_factory.getbasetemp())
@@ -166,12 +125,8 @@ def pytest_configure (config):
     seed(config.getoption('--generator-seed'))
     if config.getoption('--use-logbook-override'): use_logbook()
 
-# TODO: Generate fake legacy library 2-tuples
-# (then selectively match or skip for params based on some kind of schema)
 def pytest_generate_tests (metafunc):
     exts = extensions()
-    libs = libraries()
     ext_ids = list(map(lambda ext: ext.name, exts))
-    lib_ids = list(map(lambda lib: lib.name, libs))
-    if 'extension' in metafunc.fixturenames: metafunc.parametrize('extension', exts, ids=ext_ids)
-    if 'library' in metafunc.fixturenames: metafunc.parametrize('library', libs, ids=lib_ids)
+    if 'extension' in metafunc.fixturenames:
+        metafunc.parametrize('extension', exts, ids=ext_ids)
