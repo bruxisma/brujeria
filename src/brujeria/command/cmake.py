@@ -5,5 +5,7 @@ class CMakeCommand(build_ext):
         for ext in self.extensions:
             self.build_extension(ext)
     
+    # TODO: This is where the magic happens on both setup.py install as well
+    # as an import statement.
     def build_extension (self, ext):
         pass

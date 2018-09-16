@@ -33,7 +33,37 @@
 # error -- message(FATAL_ERROR)
 #
 # Additional functions may be added at a later time.
+import os
+from ..core.config import config
+from functools import partial
+
+def argument (opts, var, value):
+    if var is None: return
+    opts.append(f'-D{var}={value}')
 
 class Extension:
     def __init__ (self, name):
         self.name = name
+        self.path = os.path.join(name.split('.'))
+        self.languages = ['CXX']
+        self.prelude = None
+        self.version = None
+        self.description = None
+        self.args = []
+
+    def cmake_args (self):
+        options = []
+        arg = partial(argument, options)
+
+        languages = ';'.join(self.languages)
+        arg(f'BRUJERIA_PROJECT_NAME', self.name)
+        arg(f'BRUJERIA_MODULE_PATH', self.path)
+        arg(f'BRUJERIA_PROJECT_LANGUAGES', languages)
+
+        arg(f'CMAKE_PROJECT_{self.name}_INCLUDE', self.prelude)
+        arg(f'BRUJERIA_PROJECT_VERSION', self.version)
+        arg(f'BRUJERIA_PROJECT_DESCRIPTION', self.description)
+        arg(f'CMAKE_CXX_COMPILER', config.compiler.cxx)
+        arg(f'CMAKE_C_COMPILER', config.compiler.cc)
+        options.extend(self.args)
+        return options

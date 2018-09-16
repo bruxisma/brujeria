@@ -1,5 +1,6 @@
 from importlib.machinery import ModuleSpec
 from importlib.abc import MetaPathFinder
+from functools import partial
 from pathlib import Path
 import sys
 import os
@@ -7,6 +8,12 @@ import os
 from ..core.config import config
 from ..core import xdg
 from .loader import CMakeExtensionLoader
+
+class rpartial(partial):
+    def __call__ (self, *args, **kwargs):
+        kw = self.keywords.copy()
+        kw.update(kwargs)
+        return self.func(*args, *self.args, **kwargs)
 
 class CMakeExtensionFinder (MetaPathFinder):
     def __init__ (self, **kwargs):
@@ -20,13 +27,8 @@ class CMakeExtensionFinder (MetaPathFinder):
     # as long as toplevel has an __init__.py
     # ALSO: Should we support package namespaces?
     def find_spec (self, fullname, path, target=None):
-        module_path = Path(*fullname.split('.'))
+        mod = rpartial(Path, *fullname.split('.'), 'init.cmake')
         paths = path or [Path.cwd(), *sys.path]
-        for entry in map(Path, paths):
-            fullpath: Path = entry.joinpath(module_path)
-            init = fullpath.joinpath('init.cmake')
-            if not init.is_file(): continue
+        for entry in filter(Path.is_file, map(mod, paths)):
             loader = CMakeExtensionLoader(fullname)
             return ModuleSpec(fullname, loader=loader, loader_state=init)
-#            if fullpath.is_dir():
-#                return ModuleSpec(fullname, loader=None, is_package=True)

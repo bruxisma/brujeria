@@ -1,0 +1,34 @@
+[tool.poetry]
+name = "brujeria"
+version = "0.1.0"
+description = "Build native extensions on import or ahead of time"
+authors = ["Isabella Muerte <63051+slurps-mad-rips@users.noreply.github.com>"]
+license = "MIT"
+readme = "README.md"
+keywords = ["cmake", "ninja", "build-systems", "c++"]
+packages = [{ include = "brujeria", from = "src" }]
+include = [
+  "CODE_OF_CONDUCT.md",
+  "CONTRIBUTING.md",
+  "SUPPORT.md",
+  "tests/",
+  "docs/"
+]
+
+[tool.poetry.dependencies]
+python = "3.7"
+cmake = "^3.12"
+ninja = "^1.8"
+coverage = "^4.5"
+codecov = "^2.0"
+towncrier = "^18.6"
+
+[tool.poetry.dev-dependencies]
+pytest = "^3.7"
+pytest-runner = "^4.2"
+pylint = "^2.1"
+sphinx = "^1.7"
+
+
+[tools.poetry.plugins."distutils.commands"]
+build_cmake_ext = "brujeria.command:CMakeCommand"

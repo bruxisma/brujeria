@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-project = 'brujería'
+project = 'brujeria'
 copyright = '2018, Isabella Muerte'
 author = 'Isabella Muerte'
 version = '0.1'

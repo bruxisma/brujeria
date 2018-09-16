@@ -1,3 +1,4 @@
+.vscode/
 .ninja_log
 .ninja_deps
 __pycache__/

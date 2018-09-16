@@ -1,14 +1,12 @@
 Overview
 ========
 
-Brujería is a python library that augments `setuptools`_ `build_ext`_ and
-`build_clib`_
-by providing abstract interfaces for user defined extension workflows. In
-laymen's terms: It makes it easier to hook in a different build system like
-`meson`_ or `CMake`_ for your native extensions. Additionally, it provides a
-minimal `ninja`_ based build generator, and also provides an import hook for
-lazy building and importing of native extensions a-la `cppimport`_, while
-still permitting user-defined build systems.
+Brujería is a python library that augments `setuptools`_ and `build_ext`_ by
+providing abstract interfaces for user defined extension workflows. In laymen's
+terms: It makes it easier to write C and C++ native extensions while improving
+the overall workflow by adding incremental recompilation, and better REPL
+support (in that one can technically import their extension modules without
+having to manually compile anything)
 
 Why the name?
 -------------
@@ -26,17 +24,13 @@ important foundation for this initiative.
 .. toctree::
    :maxdepth: 2
 
+   Native Extensions <extensions>
    Using Brujería <usage>
-   Command Mixins <mixin>
    Build Commands <build>
-   Build Targets <target>
    Import Hooks <import>
-   Ninja Files <ninja>
+   CMake API <cmake>
 
 .. _setuptools: https://setuptools.readthedocs.io
 .. _build_ext: https://git.io/vAz6X
-.. _build_clib: https://git.io/vAz66
-.. _meson: https://mesonbuild.com
 .. _CMake: https://cmake.org
 .. _ninja: https://ninja-build.org
-.. _cppimport: https://github.com/tbenthompson/cppimport
