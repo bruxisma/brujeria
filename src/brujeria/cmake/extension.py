@@ -35,35 +35,48 @@
 # Additional functions may be added at a later time.
 import os
 from ..core.config import config
+from ..core.xdg import CACHE_HOME
 from functools import partial
+from pkg_resources import resource_filename
+from distutils import sysconfig
 
 def argument (opts, var, value):
     if var is None: return
     opts.append(f'-D{var}={value}')
 
 class Extension:
-    def __init__ (self, name):
+    def __init__ (self, name, init):
         self.name = name
-        self.path = os.path.join(name.split('.'))
-        self.languages = ['CXX']
+        self.path = init.parent
+        self.languages = ['C', 'CXX']
         self.prelude = None
         self.version = None
         self.description = None
-        self.args = []
+        self.dst = CACHE_HOME / 'brujeria' / self.name
+        cmake_src = '-H{}'.format(resource_filename('brujeria', 'data'))
+        cmake_dst = '-B{}'.format(self.dst)
+        self.args = ['-G', 'Ninja', cmake_src, cmake_dst]
+        self.suffix = sysconfig.get_config_var('EXT_SUFFIX') 
+        self.output = '{}/{}{}'.format(self.dst, self.name, self.suffix)
 
-    def cmake_args (self):
+    def build (self):
+        return ['--build', os.fspath(self.dst)]
+
+
+    def configure (self):
         options = []
         arg = partial(argument, options)
 
         languages = ';'.join(self.languages)
         arg(f'BRUJERIA_PROJECT_NAME', self.name)
-        arg(f'BRUJERIA_MODULE_PATH', self.path)
-        arg(f'BRUJERIA_PROJECT_LANGUAGES', languages)
+        arg(f'BRUJERIA_MODULE_PATH', self.path.as_posix())
+        #arg(f'BRUJERIA_PROJECT_LANGUAGES', languages)
+        arg('BRUJERIA_MODULE_EXTENSION', self.suffix)
 
-        arg(f'CMAKE_PROJECT_{self.name}_INCLUDE', self.prelude)
-        arg(f'BRUJERIA_PROJECT_VERSION', self.version)
-        arg(f'BRUJERIA_PROJECT_DESCRIPTION', self.description)
-        arg(f'CMAKE_CXX_COMPILER', config.compiler.cxx)
-        arg(f'CMAKE_C_COMPILER', config.compiler.cc)
+        #arg(f'CMAKE_PROJECT_{self.name}_INCLUDE', self.prelude)
+        #arg(f'BRUJERIA_PROJECT_VERSION', self.version)
+        #arg(f'BRUJERIA_PROJECT_DESCRIPTION', self.description)
+        #arg(f'CMAKE_CXX_COMPILER', config.compiler.cxx)
+        #arg(f'CMAKE_C_COMPILER', config.compiler.cc)
         options.extend(self.args)
         return options

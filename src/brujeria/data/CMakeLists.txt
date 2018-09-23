@@ -43,8 +43,7 @@
 cmake_minimum_required(VERSION 3.12)
 project(${BRUJERIA_PROJECT_NAME})
 
-# TODO: change the value that gets set from the config. This should be something
-# that is gotten from pkg_resources by default.
+# TODO: We need to just inline these later...
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/cmake)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
@@ -89,20 +88,21 @@ set(BUILD_TESTING OFF CACHE BOOL "" FORCE)
 foreach(var IN LISTS
   CMAKE_CXX_SOURCE_FILE_EXTENSIONS
   CMAKE_C_SOURCE_FILE_EXTENSIONS)
-  list(APPEND globs "src/*.${var}")
+  list(APPEND globs "${BRUJERIA_MODULE_PATH}/src/*.${var}")
 endforeach()
 
 file(GLOB_RECURSE sources
-  RELATIVE ${BRUJERIA_MODULE_PATH}
   CONFIGURE_DEPENDS
   ${globs})
+
+message(STATUS "Found: ${sources}")
 
 add_library(${PROJECT_NAME} MODULE)
 target_compile_definitions(${PROJECT_NAME} PRIVATE
   $<$<AND:$<COMPILE_LANGUAGE:CXX>,$<PLATFORM_ID:Windows>,$<CXX_COMPILER_ID:GNU>>:_hypot=hypot>)
 target_compile_options(${PROJECT_NAME} PRIVATE
   $<$<AND:$<COMPILE_LANGUAGE:CXX>,$<PLATFORM_ID:Windows>,$<CXX_COMPILER_ID:MSVC>>:/permissive->
-  $<$<AND:$<COMPILE_LANGUAGE:CXX>,$<PLATFORM_ID:Windows>,$<CXX_COMPILER_ID:GNU>:-include cmath>)
+  $<$<AND:$<COMPILE_LANGUAGE:CXX>,$<PLATFORM_ID:Windows>,$<CXX_COMPILER_ID:GNU>>:-include cmath>)
 target_include_directories(${PROJECT_NAME} PRIVATE ${BRUJERIA_MODULE_PATH}/include)
 target_link_libraries(${PROJECT_NAME} PRIVATE Python::Python)
 target_sources(${PROJECT_NAME} PRIVATE ${sources})
@@ -110,10 +110,8 @@ target_sources(${PROJECT_NAME} PRIVATE ${sources})
 set_target_properties(${PROJECT_NAME} PROPERTIES
   INTERPROCEDURAL_OPTIMIZATION ${BRUJERIA_IPO_SUPPORTED}
   SUFFIX ${BRUJERIA_MODULE_EXTENSION}
-  PREFIX "" # Not needed under CMake 3.12
+  PREFIX ""
 )
-# TODO: this might need to be added *after* we do the include of the init.cmake
-target_sources(${PROJECT_NAME} PRIVATE $<TARGET_OBJECTS:cython-files>)
 
 # Look into copying/symlinking init.cmake to a CMakeLists.txt file so we can add_subdirectory it?
 include(${BRUJERIA_MODULE_PATH}/init.cmake)

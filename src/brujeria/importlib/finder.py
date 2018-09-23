@@ -25,10 +25,9 @@ class CMakeExtensionFinder (MetaPathFinder):
 
     # TODO: Make sure a path dependency of toplevel/module/init.cmake works,
     # as long as toplevel has an __init__.py
-    # ALSO: Should we support package namespaces?
     def find_spec (self, fullname, path, target=None):
         mod = rpartial(Path, *fullname.split('.'), 'init.cmake')
         paths = path or [Path.cwd(), *sys.path]
         for entry in filter(Path.is_file, map(mod, paths)):
             loader = CMakeExtensionLoader(fullname)
-            return ModuleSpec(fullname, loader=loader, loader_state=init)
+            return ModuleSpec(fullname, loader=loader, loader_state=entry)

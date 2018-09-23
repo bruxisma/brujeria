@@ -5,6 +5,7 @@ description = "Build native extensions on import or ahead of time"
 authors = ["Isabella Muerte <63051+slurps-mad-rips@users.noreply.github.com>"]
 license = "MIT"
 readme = "README.md"
+repository = "https://github.com/slurps-mad-rips"
 keywords = ["cmake", "ninja", "build-systems", "c++"]
 packages = [{ include = "brujeria", from = "src" }]
 include = [
@@ -13,6 +14,20 @@ include = [
   "SUPPORT.md",
   "tests/",
   "docs/"
+]
+classifiers = [
+  "Intended Audience :: Developers"
+  "Operating System :: POSIX"
+  "Operating System :: POSIX :: BSD"
+  "Operating System :: POSIX :: Linux"
+  "Operating System :: MacOS :: MacOS X"
+  "Operating System :: Microsoft :: Windows"
+  "Topic :: Software Development :: Build Tools"
+  "Programming Language :: Python :: 3"
+  "Programming Language :: Python :: 3.5"
+  "Programming Language :: Python :: 3.6"
+  "Programming Language :: Python :: 3.7"
+  "Programming Language :: Python :: Implementation :: CPython"
 ]
 
 [tool.poetry.dependencies]

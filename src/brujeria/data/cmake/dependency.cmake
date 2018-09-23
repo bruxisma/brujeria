@@ -72,6 +72,12 @@ function (git _name _repository _tag)
   set(${_name}_SOURCE_DIR ${${_name}_SOURCE_DIR} PARENT_SCOPE)
 endfunction ()
 
+function (github _repository _tag)
+  get_filename_component(name ${_repository} NAME)
+  git(${name} "https://github.com/${_repository}.git" ${_tag})
+  set(${name}_SOURCE_DIR ${${name}_SOURCE_DIR} PARENT_SCOPE)
+endfunction ()
+
 function (fetch _name)
   FetchContent_Declare(${_name} ${ARGN})
   FetchContent_GetProperties(${_name})
@@ -91,7 +97,7 @@ function (fetch _name)
     target_include_directories(module::${_name} INTERFACE
       $<TARGET_PROPERTY:${_dep},INTERFACE_INCLUDE_DIRECTORIES>)
   endforeach()
-  # TODO: Make sure Upper/Lower works correctly... (the one set here is not going)
+  # TODO: Make sure Upper/Lower works correctly...
   # to have the same case because FetchContent turns everything into a lcName
   set(${_name}_SOURCE_DIR ${_srcdir} PARENT_SCOPE)
 endfunction ()
