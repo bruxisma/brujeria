@@ -95,8 +95,6 @@ file(GLOB_RECURSE sources
   CONFIGURE_DEPENDS
   ${globs})
 
-message(STATUS "Found: ${sources}")
-
 add_library(${PROJECT_NAME} MODULE)
 target_compile_definitions(${PROJECT_NAME} PRIVATE
   $<$<AND:$<COMPILE_LANGUAGE:CXX>,$<PLATFORM_ID:Windows>,$<CXX_COMPILER_ID:GNU>>:_hypot=hypot>)

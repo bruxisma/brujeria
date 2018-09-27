@@ -19,9 +19,7 @@ class CMakeExtensionLoader(ExtensionFileLoader):
         init = spec.loader_state
         extension = Extension(name, init)
         cmake_prg = os.path.join(CMAKE_BIN_DIR, 'cmake')
-        configure = extension.configure()
-        build = extension.build()
-        run([cmake_prg, *configure]).check_returncode()
-        run([cmake_prg, *build]).check_returncode()
+        extension.configure()
+        extension.build()
         shim = ModuleSpec(spec.name, loader=self, origin=extension.output)
         return super().create_module(shim)

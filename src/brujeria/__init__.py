@@ -1,2 +1,4 @@
-from setuptools import find_packages, Distribution, Command, Extension
-from .core import setup
+from .importlib.finder import CMakeExtensionFinder
+import sys
+
+sys.meta_path.insert(0, CMakeExtensionFinder())

@@ -39,6 +39,10 @@ from ..core.xdg import CACHE_HOME
 from functools import partial
 from pkg_resources import resource_filename
 from distutils import sysconfig
+from subprocess import run
+from cmake import CMAKE_BIN_DIR
+
+CMAKE_PRG = os.path.join(CMAKE_BIN_DIR, 'cmake')
 
 def argument (opts, var, value):
     if var is None: return
@@ -60,10 +64,10 @@ class Extension:
         self.output = '{}/{}{}'.format(self.dst, self.name, self.suffix)
 
     def build (self):
-        return ['--build', os.fspath(self.dst)]
-
+        run([CMAKE_PRG, '--build', os.fspath(self.dst)]).check_returncode()
 
     def configure (self):
+        if os.path.exists(self.dst): return
         options = []
         arg = partial(argument, options)
 
@@ -79,4 +83,5 @@ class Extension:
         #arg(f'CMAKE_CXX_COMPILER', config.compiler.cxx)
         #arg(f'CMAKE_C_COMPILER', config.compiler.cc)
         options.extend(self.args)
-        return options
+        run([CMAKE_PRG, *options]).check_returncode()
+        
