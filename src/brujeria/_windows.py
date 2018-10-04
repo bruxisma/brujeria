@@ -2,28 +2,29 @@ from ctypes.wintypes import DWORD, WORD, BYTE, HANDLE, LPVOID, LPWSTR
 from ctypes import windll, Structure, POINTER, byref
 
 from pathlib import Path
-from typing import List, get_type_hints
+from typing import List
 from uuid import UUID
 
 import ctypes
 import struct
 import sys
 
-# TODO: Let this escape to another library, or out into the wild. It's
-#       *extremely* useful when writing ctype function handles.
-def extern (cdll, name=None):
-    def wrapper (func):
-        nonlocal name
-        if not name: name = func.__name__
-        fptr = cdll[name]
-        types = get_type_hints(func)
-        restype = types.pop('return', ctypes.c_int)
-        # typing library special cases this...
-        if restype is type(None): restype = None
-        fptr.restype = restype
-        fptr.argtypes = [arg for arg in types.values()]
-        return fptr
-    return wrapper
+from .utility import extern
+
+class PointerMeta(type):
+    def __getitem__(self, typename):
+        return POINTER(typename)
+
+class Pointer(metaclass=PointerMeta):
+    pass
+
+if sys.version_info >= (3, 7):
+    class Pointer:
+        def __class_getitem__(cls, typename):
+            return POINTER(typename)
+
+class Pointer(Generic[T]):
+    pass
 
 class _GUID(Structure):
     _fields_ = [
@@ -70,4 +71,4 @@ def data_dirs () -> List[Path]: return [_get(FolderID.PROGRAM_DATA)]
 def config_home () -> Path: return _get(FolderID.ROAMING_APP_DATA)
 def cache_home () -> Path: return _get(FolderID.LOCAL_APP_DATA)
 def data_home () -> Path: return _get(FolderID.LOCAL_APP_DATA)
-def bin_home () -> Path: return _get(FolderID.LOCAL_APP_DATA).joinpath('Programs')
+def bin_home () -> Path: return _get(FolderID.LOCAL_APP_DATA) / 'Programs'

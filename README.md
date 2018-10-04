@@ -1,28 +1,30 @@
 Overview
 ========
 
-Brujería is a python library that augments [setuptools] by providing a
-[build_ext] override to use a [CMake] based approach, modify logging to use
-logbook, and allows a quicker development workflow for native extensions by
-permitting the importing of C or C++ native extensions without having to run
-setup.py first (much like [cppimport]).
+Brujería is a python library that simplifies development workflow for native
+extensions. It does this by providing import hooks that allow you to compile
+your extensions on import (much like [cppimport]) so you can play around with
+the API in a REPL. Lastly, it provides some hooks so that using these from
+tools like [poetry] are just a single line. It does all of this via CMake, but
+in a way that you the user will rarely have to write CMake at all.
 
 Features
 --------
 
 Currently, Brujería provides the following:
 
- * `build_cmake_ext` to be used in place of [build_ext]
- * ExtensionCommandMixin base class for implementing custom command classes
- * import hooks to permit automatic importing and building of C++ extensions via
-   [CMake].
- * Special Extension class and setup function that automatically handle
-   finding extensions in a given project, much like setuptools'
-   `find_packages` function.
- * Optional monkey patching to use logbook over the builtin distutils.log
+ * `build_cmake_ext` to be used in place of [build_ext]. This does not
+   make integration with setuptools easier. It is recommended that users use
+   [poetry] for project development.
+ * Automatic discovery of C and C++ extensions.
+ * The ability to mix C *and* C++ in a single extension (`distutils`/
+   `setuptools` do not currently permit this)
+ * Optional monkey patching to use logbook over the builtin `distutils.log`
    interfaces, while retaining API compatibility.
- * Additional build commands for setup.py to simplify a Makefile. (See our
-   project's Makefile for a better idea)
+ * [PLANNED] SWIG Support
+ * [PLANNED] Cython support
+ * [PLANNED] Basic [poetry] integration via preprovided `build` function.
+ * [PLANNED] `pyproject.toml` integration for configuration settings
 
 Why the name?
 -------------
@@ -37,7 +39,7 @@ a set of tools and libraries meant to *demystify* the black magic of C and C++
 toolchains, compilers, build systems, and package managers. Brujería is an
 important foundation for this initiative.
 
-[setuptools]: https://setuptools.readthedocs.io
 [build_ext]: https://git.io/vAz6X
 [cppimport]: https://github.com/tbenthompson/cppimport
+[poetry]: https://poetry.eustace.io
 [CMake]: https://cmake.org

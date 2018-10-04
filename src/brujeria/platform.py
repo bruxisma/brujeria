@@ -6,7 +6,7 @@ class Platform(Enum):
     LINUX = 'linux'
     MACOS = 'darwin'
 
-def current (): return Platform(sys.platform)
+def current () -> Platform: return Platform(sys.platform)
 def windows () -> bool: return current() == Platform.WINDOWS
 def linux () -> bool: return current() == Platform.LINUX
 def macos () -> bool: return current() == Platform.MACOS
