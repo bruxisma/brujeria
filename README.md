@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="https://github.com/slurps-mad-rips/brujeria/blob/master/docs/logo.png?raw=true">
+</p>
+
 Overview
 ========
 
