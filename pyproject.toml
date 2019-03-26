@@ -41,7 +41,7 @@ logbook = "^1.4"
 importlib_resources = "^1.0"
 
 [tool.poetry.dev-dependencies]
-pytest = "^3.7"
+pytest = "^4.3"
 pytest-runner = "^4.4"
 pylint = "^2.1"
 sphinx = "^1.7"
