@@ -43,7 +43,7 @@ importlib_resources = "^1.0"
 [tool.poetry.dev-dependencies]
 pytest = "^4.3"
 pytest-runner = "^4.4"
-pylint = "^2.1"
+pylint = "^2.3"
 sphinx = "^1.7"
 towncrier = "^19.2"
 codecov = "^2.0"
