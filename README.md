@@ -17,18 +17,18 @@ Features
 
 Currently, Brujería provides the following:
 
- * `build_cmake_ext` to be used in place of [build_ext]. This does not
-   make integration with setuptools easier. It is recommended that users use
-   [poetry] for project development.
- * Automatic discovery of C and C++ extensions.
- * The ability to mix C *and* C++ in a single extension (`distutils`/
-   `setuptools` do not currently permit this)
- * Optional monkey patching to use logbook over the builtin `distutils.log`
-   interfaces, while retaining API compatibility.
- * [PLANNED] SWIG Support
- * [PLANNED] Cython support
- * [PLANNED] Basic [poetry] integration via preprovided `build` function.
- * [PLANNED] `pyproject.toml` integration for configuration settings
+ * [x] `build_cmake_ext` to be used in place of [build_ext]. This does not
+       make integration with setuptools easier. It is recommended that users use
+       [poetry] for project development.
+ * [x] Automatic discovery of C and C++ extensions.
+ * [x] The ability to mix C *and* C++ in a single extension (`distutils`/
+       `setuptools` do not currently permit this)
+ * [x] Optional monkey patching to use logbook over the builtin `distutils.log`
+       interfaces, while retaining API compatibility.
+ * [ ] SWIG Support
+ * [ ] Cython support
+ * [ ] Basic [poetry] integration via preprovided `build` function.
+ * [ ] `pyproject.toml` integration for configuration settings
 
 Why the name?
 -------------
