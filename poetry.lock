@@ -316,8 +316,8 @@ category = "dev"
 description = "Invoke py.test as distutils command with dependency resolution"
 name = "pytest-runner"
 optional = false
-python-versions = ">=2.7,!=3.0,!=3.1"
-version = "4.4"
+python-versions = ">=2.7"
+version = "5.1"
 
 [[package]]
 category = "dev"
@@ -488,7 +488,7 @@ python-versions = "*"
 version = "1.10.11"
 
 [metadata]
-content-hash = "9a633f283e86184669b19f56b0c319a927917f41c361a982fa7ccf22ab163ab6"
+content-hash = "631b032410348961b84f1c56c9427b7ebb029fb7cfdef9ab306bf899d1e007bb"
 python-versions = "3.7"
 
 [metadata.hashes]
@@ -525,7 +525,7 @@ pylint = ["5d77031694a5fb97ea95e828c8d10fc770a1df6eb3906067aaed42201a8a6a09", "7
 pyparsing = ["bc6c7146b91af3f567cf6daeaec360bc07d45ffec4cf5353f4d7a208ce7ca30a", "d29593d8ebe7b57d6967b62494f8c72b03ac0262b1eed63826c6f788b3606401"]
 pytest = ["1a8aa4fa958f8f451ac5441f3ac130d9fc86ea38780dd2715e6d5c5882700b24", "b8bf138592384bd4e87338cb0f256bf5f615398a649d4bd83915f0e4047a5ca6"]
 pytest-logbook = ["9454453230989a3d5149689c3449445554808d429b651a3d89c4464054a4c2dc", "e2e79cf188fdae3fc7c857a168a9f18a5d9cca6234f38795b3ff628d23e2be17"]
-pytest-runner = ["00ad6cd754ce55b01b868a6d00b77161e4d2006b3918bde882376a0a884d0df4", "e946c7dbdc8c0c2ffa44e7b45450f68e7f08cb133983134fa63a1d1486c2b36b"]
+pytest-runner = ["25a013c8d84f0ca60bb01bd11913a3bcab420f601f0f236de4423074af656e7a", "d04243fbf29a3b574f18f1bcff2a07f505db5daede82f706f2e32728f77d3f4d"]
 pytz = ["a061aa0a9e06881eb8b3b2b43f05b9439d6583c206d0a6c340ff72a7b6669053", "ffb9ef1de172603304d9d2819af6f5ece76f2e85ec10692a524dd876e72bf277"]
 requests = ["502a824f31acdacb3a35b6690b5fbf0bc41d63a24a45c4004352b0242707598e", "7bf2a778576d825600030a110f3c0e3e8edc51dfaafe1c146e39a2027784957b"]
 six = ["70e8a77beed4562e7f14fe23a786b54f6296e34344c23bc42f07b15018ff98e9", "832dc0e10feb1aa2c68dcc57dbb658f1c7e65b9b61af69048abc87a2db00a0eb"]
