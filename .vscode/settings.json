@@ -1,0 +1,18 @@
+{
+  "python.pythonPath": "${workspaceFolder}/.venv/Scripts/python",
+  "python.linting.enabled": true,
+  "python.linting.flake8Enabled": true,
+  "python.linting.pylintEnabled": false,
+  "python.formatting.provider": "black",
+  "python.testing.unittestEnabled": false,
+  "python.testing.nosetestsEnabled": false,
+  "python.testing.pytestEnabled": true,
+  "python.testing.pytestArgs": [
+    "tests"
+  ],
+  "python.linting.flake8Args": [
+    "--ignore=W292,W391",
+    "--exclude=build/,dist/",
+    "--max-line-length=100"
+  ],
+}

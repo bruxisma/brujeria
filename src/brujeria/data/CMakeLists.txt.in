@@ -1,0 +1,57 @@
+cmake_minimum_required(VERSION 3.14 FATAL_ERROR)
+include(FetchContent)
+FetchContent_Declare(ixm URL https://get.ixm.one)
+FetchContent_MakeAvailable(ixm)
+project(${BRUJERIA_PROJECT_NAME} BLUEPRINT Brujeria) # BLUEPRINT Coven TYPE Python
+
+genexp(is-mingw $<AND:
+  $<COMPILE_LANGUAGE:CXX>,
+  $<PLATFORM_ID:Windows>,
+  $<CXX_COMPILER_ID:GNU>
+>)
+
+genexp(is-msvc $<AND:
+  $<COMPILE_LANGUAGE:CXX>,
+  $<PLATFORM_ID:Windows>,
+  $<CXX_COMPILER_ID:MSVC>
+>)
+
+genexp(any-clang $<OR:
+  $<CXX_COMPILER_ID:AppleClang>,
+  $<CXX_COMPILER_ID:Clang>
+>)
+
+target(MODULE ${PROJECT_NAME})
+target(SOURCES ${PROJECT_NAME} PRIVATE "src/*")
+target(DEFINITIONS ${PROJECT_NAME} PRIVATE ...)
+target(COMPILE ${PROJECT_NAME}
+  DEFINITIONS
+    PRIVATE ...
+  OPTIONS
+    PRIVATE ...)
+target(LINK ${PROJECT_NAME}
+  LIBRARIES
+    PRIVATE
+      Python::Python
+  OPTIONS
+    PRIVATE
+      ...)
+target(PROPERTIES ${PROJECT_NAME}
+  key value
+  key value)
+target_compile_definitions(${PROJECT_NAME} PRIVATE $<${is-mingw}:_hypot=hypot>)    
+target_compile_options(${PROJECT_NAME}
+  PRIVATE
+    $<${is-msvc}:/permissive->
+    $<${is-mingw}:-include cmath>
+    $<$<AND:$<COMPILE_LANGUAGE:CXX,$<CXX_COMPILER_ID:GNU>>:-fdiagnostics-color=always>
+    $<$<AND:$<COMPILE_LANGUAGE:CXX,${any-clang}>:-fcolor-diagnostics>)
+
+target_include_directories(${PROJECT_NAME} PRIVATE ${BRUJERIA_MODULE_PATH}/include)
+target_link_libraries(${PROJECT_NAME} PRIVATE Python::Python)
+set_target_properties(${PROJECT_NAME} PROPERTIES
+  INTERPROCEDURAL_OPTIMIZATION ${BRUJERIA_IPO_SUPPORTED}
+  SUFFIX ${BRUJERIA_MODULE_EXTENSION}
+  PREFIX "")
+
+include(${BRUJERIA_MODULE_PATH}/init.cmake)

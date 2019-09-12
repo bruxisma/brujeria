@@ -1,48 +1,20 @@
 # TODO: Add support for cython modules.
 # TODO: Add support for SWIG modules.
-cmake_minimum_required(VERSION 3.12)
+cmake_minimum_required(VERSION 3.14)
+include(FetchContent)
+FetchContent_Declare(ixm URL https://get.ixm.one)
+FetchContent_MakeAvailable(ixm)
 project(${BRUJERIA_PROJECT_NAME})
-
-list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/cmake)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-include(CheckCXXSourceCompiles)
-include(CheckCXXSymbolExists)
-include(CheckIncludeFileCXX)
-include(CheckCXXSourceRuns)
-include(CheckIPOSupported)
-
-include(CheckPrototypeDefinition)
-include(CheckCSourceCompiles)
-include(CheckCCompilerFlag)
-include(CheckSymbolExists)
-include(CheckIncludeFile)
-
-include(FetchContent)
+find_package(Python COMPONENTS Development REQUIRED ${BRUJERIA_PYTHON_VERSION})
 
 # TODO: Provide a way to get Catch2, while also providing a small C++ API so
 # that a user can automatically add their unit tests to their modules, *or*,
 # if they're so inclined, can have their test_modules separate from their
 # source modules, much like the current python style way of doing things.
 
-include(dependency)
-include(utility)
-include(build)
-
-find_package(Python COMPONENTS Development REQUIRED ${BRUJERIA_PYTHON_VERSION})
-find_package(Git REQUIRED)
-
 check_ipo_supported(RESULT BRUJERIA_IPO_SUPPORTED)
-
-# We don't want to test or build shared libs unless it's explicitly done.
-# This is provided for us by adding 'test' modules and run through a manually
-# added catch2 dependency that allows us to "link" pytest and catch2, while
-# letting python to act as the test runner
-set(BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)
-set(BUILD_TESTING OFF CACHE BOOL "" FORCE)
-
-# Need to download this, then run a SHA hash against it.
-# https://github.com/catchorg/Catch2/releases/download/v2.2.3/catch.hpp
 
 foreach(var IN LISTS
   CMAKE_CXX_SOURCE_FILE_EXTENSIONS

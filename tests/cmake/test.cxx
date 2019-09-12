@@ -58,8 +58,8 @@ struct Custom : PyObject {
   // The actual names need to be figured out.
   static inline auto methods = methods {
     method("name", "Return full name") = [] (handle self) {
-      if (not self->first) { return error(PyExc_AttributeError, "first"); }
-      if (not self->last) { return error(PyExc_AttributeError, "last"); }
+      if (not self->first) { throw AttributeError("first"); }
+      if (not self->last) { throw AttributeError("last"); }
       return format("{} {}", self->first, self->last); // cobra::format -> cobra::unicode
     }
   };

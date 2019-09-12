@@ -1,5 +1,5 @@
 [build-system]
-requires = ['setuptools', 'wheel', 'poetry']
+requires = ['poetry>=0.12', 'pip', 'setuptools']
 
 [tool.poetry]
 name = "brujeria"
@@ -8,9 +8,8 @@ description = "Build native extensions on import or ahead of time"
 authors = ["Isabella Muerte <63051+slurps-mad-rips@users.noreply.github.com>"]
 license = "MIT"
 readme = "README.md"
-repository = "https://github.com/slurps-mad-rips"
+repository = "https://github.com/slurps-mad-rips/brujeria"
 keywords = ["cmake", "ninja", "build-systems", "c++"]
-packages = [{ include = "brujeria" }]
 include = [
   "CODE_OF_CONDUCT.md",
   "CONTRIBUTING.md",
@@ -34,21 +33,19 @@ classifiers = [
 ]
 
 [tool.poetry.dependencies]
-python = "3.7"
+python = "^3.7"
 cmake = "^3.14"
 ninja = "^1.9"
-logbook = "^1.5"
-importlib_resources = "^1.0"
+importlib-resources = "^1.0"
+loguru = "^0.3.2"
 
 [tool.poetry.dev-dependencies]
-pytest = "^5.1"
 pytest-runner = "^5.1"
-pylint = "^2.3"
-sphinx = "^2.2"
-towncrier = "^19.2"
+pytest-cov = "^2.7"
+pytest = "^3.0"
+black = { version = "^19.3b0", allows-prereleases = true }
 codecov = "^2.0"
-coverage = "^4.5"
-pytest-logbook = "^1.2"
+flake8 = "^3.7"
 
 
 [tools.poetry.plugins."distutils.commands"]

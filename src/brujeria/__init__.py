@@ -1,4 +1,4 @@
-from .finder import BrujeriaCMakeFinder
+from . import machinery
 import sys
 
-sys.meta_path.insert(0, BrujeriaCMakeFinder())
+sys.meta_path.insert(0, machinery.CMakeFinder())
