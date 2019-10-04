@@ -41,7 +41,7 @@ loguru = "^0.3.2"
 
 [tool.poetry.dev-dependencies]
 pytest-runner = "^5.1"
-pytest-cov = "^2.7"
+pytest-cov = "^2.8"
 pytest = "^5.1"
 black = { version = "^19.3b0", allows-prereleases = true }
 codecov = "^2.0"
