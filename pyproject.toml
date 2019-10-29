@@ -43,7 +43,7 @@ loguru = "^0.3.2"
 pytest-runner = "^5.2"
 pytest-cov = "^2.8"
 pytest = "^5.2"
-black = { version = "^19.3b0", allows-prereleases = true }
+black = { version = "^19.10b0", allows-prereleases = true }
 codecov = "^2.0"
 flake8 = "^3.7"
 
