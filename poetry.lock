@@ -161,7 +161,7 @@ description = "Read resources from Python packages"
 name = "importlib-resources"
 optional = false
 python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*,>=2.7"
-version = "1.4.0"
+version = "1.5.0"
 
 [package.dependencies]
 [package.dependencies.importlib-metadata]
@@ -435,7 +435,7 @@ docs = ["sphinx", "jaraco.packaging (>=3.2)", "rst.linker (>=1.9)"]
 testing = ["pathlib2", "contextlib2", "unittest2"]
 
 [metadata]
-content-hash = "6b597c0b655e68f4eef5f8966cf6892f2e3569f225798516f57f1e1715db09be"
+content-hash = "6a988be1319afed93780b20ef49be46f19e9a92f628f9735228bf43f2d28f8dc"
 python-versions = "^3.7"
 
 [metadata.files]
@@ -539,8 +539,8 @@ importlib-metadata = [
     {file = "importlib_metadata-0.22.tar.gz", hash = "sha256:652234b6ab8f2506ae58e528b6fbcc668831d3cc758e1bc01ef438d328b68cdb"},
 ]
 importlib-resources = [
-    {file = "importlib_resources-1.4.0-py2.py3-none-any.whl", hash = "sha256:dd98ceeef3f5ad2ef4cc287b8586da4ebad15877f351e9688987ad663a0a29b8"},
-    {file = "importlib_resources-1.4.0.tar.gz", hash = "sha256:4019b6a9082d8ada9def02bece4a76b131518866790d58fdda0b5f8c603b36c2"},
+    {file = "importlib_resources-1.5.0-py2.py3-none-any.whl", hash = "sha256:85dc0b9b325ff78c8bef2e4ff42616094e16b98ebd5e3b50fe7e2f0bbcdcde49"},
+    {file = "importlib_resources-1.5.0.tar.gz", hash = "sha256:6f87df66833e1942667108628ec48900e02a4ab4ad850e25fbf07cb17cf734ca"},
 ]
 loguru = [
     {file = "loguru-0.4.1-py3-none-any.whl", hash = "sha256:074b3caa6748452c1e4f2b302093c94b65d5a4c5a4d7743636b4121e06437b0e"},
