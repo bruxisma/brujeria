@@ -45,7 +45,7 @@ pytest-cov = "^2.8"
 pytest = "^5.4"
 black = { version = "^19.10b0", allows-prereleases = true }
 codecov = "^2.0"
-flake8 = "^3.7"
+flake8 = "^3.8"
 
 
 [tools.poetry.plugins."distutils.commands"]
