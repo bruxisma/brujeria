@@ -35,7 +35,7 @@ classifiers = [
 [tool.poetry.dependencies]
 python = "^3.7"
 cmake = "^3.17"
-ninja = "^1.9"
+ninja = "^1.10"
 importlib-resources = "^1.5"
 loguru = "^0.5.0"
 
