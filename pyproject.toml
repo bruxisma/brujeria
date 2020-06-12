@@ -37,7 +37,7 @@ python = "^3.7"
 cmake = "^3.17"
 ninja = "^1.10"
 importlib-resources = "^2.0"
-loguru = "^0.5.0"
+loguru = "^0.5.1"
 
 [tool.poetry.dev-dependencies]
 pytest-runner = "^5.2"
