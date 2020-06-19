@@ -1,12 +1,12 @@
 Overview
 ========
 
-Brujería is a python library that augments `setuptools`_ and `build_ext`_ by
-providing abstract interfaces for user defined extension workflows. In laymen's
-terms: It makes it easier to write C and C++ native extensions while improving
-the overall workflow by adding incremental recompilation, and better REPL
-support (in that one can technically import their extension modules without
-having to manually compile anything)
+Brujería is a python library that augments native python extension development
+by providing abstract interfaces for user defined extension workflows. In
+laymen's terms: It makes it easier to write C and C++ native extensions while
+improving the overall workflow by adding incremental recompilation, and better
+REPL support (in that one can technically import their extension modules
+without having to manually compile anything)
 
 Why the name?
 -------------
@@ -27,7 +27,6 @@ important foundation for this initiative.
    Native Extensions <extensions>
    Using Brujería <usage>
    Build Commands <build>
-   Import Hooks <import>
    CMake API <cmake>
 
 .. _setuptools: https://setuptools.readthedocs.io

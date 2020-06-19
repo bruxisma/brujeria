@@ -23,17 +23,18 @@ development workflow while still acting as though it were distutils or
 setuptools running the build. Additionally, a prototyping development workflow
 is supported, allowing one to *import* their native extension directly from the
 Python REPL. This can be useful for manual testing before unit tests are
-written.
+written, as testing native extensions is also a big pain point in the python
+world.
 
-In addition to the above, Brujería also automatically provides a way to generate
-unit tests for your code via the Catch2 C++ library. Simply writing your unit
-tests in your C++ code will be enough for py.test to run them directly, without
-having to write test harnesses or run executables via CMake's CTest.
+..todo:: Still in the works
+In addition to the above, Brujería also automatically provides a way
+to generate unit tests for your code via the Catch2 C++ library. Simply writing
+your unit tests in your C++ code will be enough for py.test to run them
+directly, without having to write test harnesses or run executables via CMake's
+CTest.
 
-Brujería also provides several utilities for making the python development
-workflow a bit better. These are discussed in depth in :doc:`utility`, and it
-is recommended that developers at the very least take a quick look to understand
-what else Brujería can do.
+Brujería is expected to be used in conjunction with poetry and the IXM CMake
+library (which provides a "project blueprint" that Brujeria depends on)
 
 Incremental Recompilation
 -------------------------
@@ -42,7 +43,7 @@ The incremental recompilation development workflow is quite simple. When a file
 or any of the other files it depends on (such as headers) change, the minimal
 set of files are recompiled and then relinked into the extension module. This
 saves quite a bit of time when developing, and currently distutils and
-setuptools do not support this approach.
+setuptools do not support this approach, while most existing build systems do.
 
 Prototyping Imports
 -------------------
@@ -53,4 +54,9 @@ extension, and then run tests, or an additional script. Brujería provides an
 ``importlib`` mechanism to permit importing a native extension directly into a
 REPL. This gives one the ability to write small test functions, or to play
 around with a native extensions API, without having to touch the rest of a
-project.
+project. This differs from the builtin native extension loading, as a user must run their build before import. Brujeria will attempt to build the module before importing it. This saves time and effort in general.
+
+.. note:: Due to a limitation of CPython, the CPython REPL must be exited if a
+   module was successfully imported and changes have been made. This is because
+   no matter what, CPython *never* unloads a module, and CMake cannot overwrite
+   the location and thus brujeria cannot reimport the entire project.
