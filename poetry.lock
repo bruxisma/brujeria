@@ -78,7 +78,7 @@ description = "CMake is an open-source, cross-platform family of tools designed 
 name = "cmake"
 optional = false
 python-versions = "*"
-version = "3.18.2"
+version = "3.18.2.post1"
 
 [[package]]
 category = "dev"
@@ -460,17 +460,18 @@ click = [
     {file = "Click-7.0.tar.gz", hash = "sha256:5b94b49521f6456670fdb30cd82a4eca9412788a93fa6dd6df72c94d5a8ff2d7"},
 ]
 cmake = [
-    {file = "cmake-3.18.2-py2-none-macosx_10_6_x86_64.whl", hash = "sha256:b2fcfcae28902c4e5566d9a5af4e08004c4bb49cefffaf10b77884243da04e16"},
-    {file = "cmake-3.18.2-py2-none-manylinux1_i686.whl", hash = "sha256:109d4de6879a9685fb85129c6d5b9b07d755be90a6b6bb41a897834a9b2c7aac"},
-    {file = "cmake-3.18.2-py2-none-manylinux1_x86_64.whl", hash = "sha256:5c0ff46e8c65b8be759435d924bf995609c524fc067a4598e7e2723d05da690c"},
-    {file = "cmake-3.18.2-py2-none-win32.whl", hash = "sha256:9ebb9b19cc4ade0b9f2f5f3f8d006bed71033b120cdfdbb988d5f103cc0df341"},
-    {file = "cmake-3.18.2-py2-none-win_amd64.whl", hash = "sha256:189b328614b9536b6dd84e847747574904f0d2387d85062f29a9e5d2be95d3ab"},
-    {file = "cmake-3.18.2-py3-none-manylinux1_i686.whl", hash = "sha256:1343604c5f9709ef3cab596d880dafeaf1cf6d59afbc8a2cfedccf3f2ec1b9b5"},
-    {file = "cmake-3.18.2-py3-none-manylinux1_x86_64.whl", hash = "sha256:b0a87d35086fc9ded49cb915dd976308ed1cf19fc5609cfebc0362c75e80f996"},
-    {file = "cmake-3.18.2-py3-none-manylinux2014_aarch64.whl", hash = "sha256:594ece49107ce038310dafb426ac7c896ddc1091b75e2b8c761f47f163298d10"},
-    {file = "cmake-3.18.2-py3-none-win32.whl", hash = "sha256:774e588710d827cdeb0a1d36d487b4cd7ca9967a3dc711d7429c5ae4aacdbc84"},
-    {file = "cmake-3.18.2-py3-none-win_amd64.whl", hash = "sha256:de56627ec95ee009ff19b78688b403e24e77cb27ce405b6869760c43d54f359f"},
-    {file = "cmake-3.18.2.tar.gz", hash = "sha256:4570fbff976d8b920501c5e8f3c281e88bdad277bb14e0045dc051f319528656"},
+    {file = "cmake-3.18.2.post1-py2-none-macosx_10_6_x86_64.whl", hash = "sha256:abeed6b61476e517b53776e025dd33fa0f4c10cfb985ced346b895075a31db79"},
+    {file = "cmake-3.18.2.post1-py2-none-manylinux1_i686.whl", hash = "sha256:59c167b260a9eb76ef216ea6b1916d607cf467b9a83f2c7e585760cc87162291"},
+    {file = "cmake-3.18.2.post1-py2-none-manylinux1_x86_64.whl", hash = "sha256:e0b81c4efd0ddef3e7705d1d93bc8d31ba6603da83cdfd617f879ab3dcb462ac"},
+    {file = "cmake-3.18.2.post1-py2-none-win32.whl", hash = "sha256:fc503362b9a1c71d329b52096be1298f37884cf8582c32636416fbfa8eed7160"},
+    {file = "cmake-3.18.2.post1-py2-none-win_amd64.whl", hash = "sha256:b61184b90d4c70e7f892fe16b44d5426688bb98fc1ec640880f86dd1841cd9e6"},
+    {file = "cmake-3.18.2.post1-py3-none-macosx_10_6_x86_64.whl", hash = "sha256:dfa3b3c28f34bd65d1862186f14e87eb84551866948acc8e876762e70a8bd58d"},
+    {file = "cmake-3.18.2.post1-py3-none-manylinux1_i686.whl", hash = "sha256:828b9918fc97c68e8491221bf9ba684936e6d881848b30741580ec0239c3237c"},
+    {file = "cmake-3.18.2.post1-py3-none-manylinux1_x86_64.whl", hash = "sha256:f5839595152154467f7fde1ddab15628bdf927a9c5671918764a90cd57dd25b4"},
+    {file = "cmake-3.18.2.post1-py3-none-manylinux2014_aarch64.whl", hash = "sha256:39bbeeb0ee8620913b5e60403ee1603a27c2177b2dda4f5a6c9e0e7af9e29774"},
+    {file = "cmake-3.18.2.post1-py3-none-win32.whl", hash = "sha256:3ea8bbcdce3364c23e0f252ce792a96c29d1ed29861c7b275a27fe832714889d"},
+    {file = "cmake-3.18.2.post1-py3-none-win_amd64.whl", hash = "sha256:d3f21b880f3f5028629201275b6bb97bbc4fa288467b641a34fb3e4c3161fb00"},
+    {file = "cmake-3.18.2.post1.tar.gz", hash = "sha256:e8da3c9e6ed6d460965e88937ca6e4d91205a4341a8cd316082c09050f1b0822"},
 ]
 codecov = [
     {file = "codecov-2.1.9-py2.py3-none-any.whl", hash = "sha256:24545847177a893716b3455ac5bfbafe0465f38d4eb86ea922c09adc7f327e65"},
