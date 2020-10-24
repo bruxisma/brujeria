@@ -148,7 +148,7 @@ testing = ["packaging", "importlib-resources"]
 
 [[package]]
 name = "importlib-resources"
-version = "3.0.0"
+version = "3.1.1"
 description = "Read resources from Python packages"
 category = "main"
 optional = false
@@ -431,7 +431,7 @@ testing = ["pathlib2", "contextlib2", "unittest2"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7"
-content-hash = "1e978ba9eb3d2bc8d2fdf2e423b4e79ad243635dc82ab2253d36acbbd9767927"
+content-hash = "55d55dda6fa5baeed966436b52b2ce3c3b30b5469dd44976d9cb1ab4de089d66"
 
 [metadata.files]
 appdirs = [
@@ -531,8 +531,8 @@ importlib-metadata = [
     {file = "importlib_metadata-0.22.tar.gz", hash = "sha256:652234b6ab8f2506ae58e528b6fbcc668831d3cc758e1bc01ef438d328b68cdb"},
 ]
 importlib-resources = [
-    {file = "importlib_resources-3.0.0-py2.py3-none-any.whl", hash = "sha256:d028f66b66c0d5732dae86ba4276999855e162a749c92620a38c1d779ed138a7"},
-    {file = "importlib_resources-3.0.0.tar.gz", hash = "sha256:19f745a6eca188b490b1428c8d1d4a0d2368759f32370ea8fb89cad2ab1106c3"},
+    {file = "importlib_resources-3.1.1-py2.py3-none-any.whl", hash = "sha256:b2e45e7518111611b811870531757bedf0888993c316df515e1de76142d34b94"},
+    {file = "importlib_resources-3.1.1.tar.gz", hash = "sha256:f7e3ed111a2195518ebf30e2e1e772f24fc588920e46f8ea99167a63aa78c2c9"},
 ]
 iniconfig = [
     {file = "iniconfig-1.0.0.tar.gz", hash = "sha256:aa0b40f50a00e72323cb5d41302f9c6165728fd764ac8822aa3fff00a40d56b4"},
