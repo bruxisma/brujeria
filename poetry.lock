@@ -149,7 +149,7 @@ testing = ["packaging", "importlib-resources"]
 
 [[package]]
 name = "importlib-resources"
-version = "3.3.0"
+version = "3.3.1"
 description = "Read resources from Python packages"
 category = "main"
 optional = false
@@ -531,8 +531,8 @@ importlib-metadata = [
     {file = "importlib_metadata-0.22.tar.gz", hash = "sha256:652234b6ab8f2506ae58e528b6fbcc668831d3cc758e1bc01ef438d328b68cdb"},
 ]
 importlib-resources = [
-    {file = "importlib_resources-3.3.0-py2.py3-none-any.whl", hash = "sha256:a3d34a8464ce1d5d7c92b0ea4e921e696d86f2aa212e684451cb1482c8d84ed5"},
-    {file = "importlib_resources-3.3.0.tar.gz", hash = "sha256:7b51f0106c8ec564b1bef3d9c588bc694ce2b92125bbb6278f4f2f5b54ec3592"},
+    {file = "importlib_resources-3.3.1-py2.py3-none-any.whl", hash = "sha256:42068585cc5e8c2bf0a17449817401102a5125cbfbb26bb0f43cde1568f6f2df"},
+    {file = "importlib_resources-3.3.1.tar.gz", hash = "sha256:0ed250dbd291947d1a298e89f39afcc477d5a6624770503034b72588601bcc05"},
 ]
 iniconfig = [
     {file = "iniconfig-1.0.0.tar.gz", hash = "sha256:aa0b40f50a00e72323cb5d41302f9c6165728fd764ac8822aa3fff00a40d56b4"},
