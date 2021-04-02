@@ -39,7 +39,7 @@ def config_home() -> Path:
 
 def cache_home() -> Path:
     if platform.windows():
-        return _windows.config_home()
+        return _windows.cache_home()
     if platform.macos():
         return data_home().joinpath("Caches")
     return Path(os.environ.get("XDG_CACHE_HOME", "~/.cache")).expanduser()

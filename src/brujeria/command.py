@@ -20,8 +20,9 @@
 #         # We read from the pyproject.toml for configuration settings
 #         # from this, we can also read from the poetry project info so we
 #         # know where to look in general. From there we generate the list
-#         # of known init.cmake locations, and then build them into the correct
-#         # directory (i.e., self.build_lib)
+#         # of known init.cmake locations, and then build them with
+# each project in a specific subdirectory of self.build_temp
+# We also explicitly set CMAKE_LIBRARY_OUTPUT_DIRECTORY to self.build_lib
 #         #with open('pyproject.toml') as config:
 #         #    config = tomlkit.parse(config.read())['tool']['poetry']
 #         #module = Module(config['name'], packages=config.get('packages'))

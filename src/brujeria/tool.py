@@ -1,15 +1,16 @@
 from subprocess import run
+from importlib import resources
 from distutils import sysconfig
 from functools import partial
 from pathlib import Path
 import os
 
 from cmake import CMAKE_BIN_DIR
-import importlib_resources
 
 from .app import CACHE_HOME
 
 CMAKE_PRG = os.path.join(CMAKE_BIN_DIR, "cmake")
+# This might not be needed now!
 SUFFIX = sysconfig.get_config_var("EXT_SUFFIX")
 
 
@@ -39,7 +40,7 @@ class CMake:
 
     @property
     def source_dir(self) -> Path:
-        with importlib_resources.path("brujeria", "data") as path:
+        with resources.path("brujeria", "data") as path:
             return Path(path)
 
     @property
@@ -47,7 +48,8 @@ class CMake:
         return CACHE_HOME / "brujeria" / self.package / self.name
 
     def configure(self):
-        if os.path.exists(self.binary_dir):
+        if self.binary_dir.exists():
+            print(self.binary_dir)
             return
         options = [
             CMAKE_PRG,
@@ -61,6 +63,7 @@ class CMake:
         # arg('CMAKE_C_COMPILER', config.compiler.cc)
         arg("BRUJERIA_PROJECT_NAME", self.name)
         arg("BRUJERIA_MODULE_PATH", self.path.as_posix())
+        # This might not be needed now as of CMake 3.17 :)
         arg("BRUJERIA_MODULE_EXTENSION", SUFFIX)
         arg("BRUJERIA_PROJECT_DESCRIPTION", self.description)
         arg("BRUJERIA_PROJECT_VERSION", self.version)

@@ -2,13 +2,31 @@ from ctypes.wintypes import DWORD, WORD, BYTE, HANDLE, LPWSTR
 from ctypes import windll, Structure, POINTER, byref
 
 from pathlib import Path
-from typing import List
+from typing import List, get_type_hints
 from uuid import UUID
 
 import ctypes
 import struct
 
-from .utility import extern
+
+def extern(cdll, name=None):
+    """Use type hints to declare and create ctypes function pointers"""
+
+    def wrapper(func):
+        nonlocal name
+        if not name:
+            name = func.__name__
+        fptr = cdll[name]
+        types = get_type_hints(func)
+        restype = types.pop("return", ctypes.c_int)
+        # typing library special cases this and I personally find it weird
+        if restype is type(None):  # noqa: E721
+            restype = None
+        fptr.restype = restype
+        fptr.argtypes = list(types.values())
+        return fptr
+
+    return wrapper
 
 
 class Pointer:
@@ -25,8 +43,8 @@ class _GUID(Structure):
         self.w[:] = [*rest[:2], *tuple(struct.pack("!Q", rest[2]))[2:8]]
 
 
-_REFKNOWNFOLDERID = POINTER(_GUID)
-_PWSTR = POINTER(LPWSTR)
+_REFKNOWNFOLDERID = Pointer[_GUID]
+_PWSTR = Pointer[LPWSTR]
 
 
 @extern(windll.ole32, "CoTaskMemFree")

@@ -33,19 +33,18 @@ classifiers = [
 ]
 
 [tool.poetry.dependencies]
-python = "^3.7"
+python = "^3.8"
 cmake = "^3.18"
 ninja = "^1.10"
-importlib-resources = "^5.0"
 loguru = "^0.5.3"
 
 [tool.poetry.dev-dependencies]
 pytest-runner = "^5.2"
 pytest-cov = "^2.10"
 pytest = "^6.2"
-black = { version = "^20.8b1", allows-prereleases = true }
 codecov = "^2.1"
 flake8 = "^3.8"
+black = "^20.8b1"
 
 
 [tools.poetry.plugins."distutils.commands"]

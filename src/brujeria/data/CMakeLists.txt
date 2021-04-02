@@ -1,49 +1,39 @@
-# TODO: Add support for cython modules.
-# TODO: Add support for SWIG modules.
-cmake_minimum_required(VERSION 3.14)
-include(FetchContent)
-FetchContent_Declare(ixm URL https://get.ixm.one)
-FetchContent_MakeAvailable(ixm)
-project(${BRUJERIA_PROJECT_NAME})
-set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+cmake_minimum_required(VERSION 3.18)
+cmake_policy(VERSION 3.18)
+project(${BRUJERIA_PROJECT_NAME}
+  DESCRIPTION "${BRUJERIA_PROJECT_DESCRIPTION}"
+  VERSION "${BRUJERIA_PROJECT_VERSION}")
 
-find_package(Python COMPONENTS Development REQUIRED ${BRUJERIA_PYTHON_VERSION})
+include(CMakePrintHelpers)
 
-# TODO: Provide a way to get Catch2, while also providing a small C++ API so
-# that a user can automatically add their unit tests to their modules, *or*,
-# if they're so inclined, can have their test_modules separate from their
-# source modules, much like the current python style way of doing things.
+find_package(Python COMPONENTS Interpreter Development.Module REQUIRED)
 
-check_ipo_supported(RESULT BRUJERIA_IPO_SUPPORTED)
+file(GLOB_RECURSE sources CONFIGURE_DEPENDS ${BRUJERIA_MODULE_PATH}/src/*)
 
-foreach(var IN LISTS
-  CMAKE_CXX_SOURCE_FILE_EXTENSIONS
-  CMAKE_C_SOURCE_FILE_EXTENSIONS)
-  list(APPEND globs "${BRUJERIA_MODULE_PATH}/src/*.${var}")
-endforeach()
+string(CONCAT is-mingw $<AND:
+  $<COMPILE_LANG_AND_ID:CXX,GNU>,
+  $<PLATFORM_ID:Windows>
+>)
 
-file(GLOB_RECURSE sources
-  CONFIGURE_DEPENDS
-  ${globs})
-
-set(EITHER_CLANG $<OR:$<CXX_COMPILER_ID:AppleClang>,$<CXX_COMPILER_ID:Clang>>)
-
-add_library(${PROJECT_NAME} MODULE)
-target_compile_definitions(${PROJECT_NAME} PRIVATE
-  $<$<AND:$<COMPILE_LANGUAGE:CXX>,$<PLATFORM_ID:Windows>,$<CXX_COMPILER_ID:GNU>>:_hypot=hypot>)
-target_compile_options(${PROJECT_NAME} PRIVATE
-  $<$<AND:$<COMPILE_LANGUAGE:CXX>,$<PLATFORM_ID:Windows>,$<CXX_COMPILER_ID:MSVC>>:/permissive->
-  $<$<AND:$<COMPILE_LANGUAGE:CXX>,$<PLATFORM_ID:Windows>,$<CXX_COMPILER_ID:GNU>>:-include cmath>
-  $<$<AND:$<COMPILE_LANGUAGE:CXX>,$<CXX_COMPILER_ID:GNU>>:-fdiagnostics-color=always>
-  $<$<AND:$<COMPILE_LANGUAGE:CXX>,${EITHER_CLANG}>:-fcolor-diagnostics>)
-target_include_directories(${PROJECT_NAME} PRIVATE ${BRUJERIA_MODULE_PATH}/include)
-target_link_libraries(${PROJECT_NAME} PRIVATE Python::Python)
+Python_add_library(${PROJECT_NAME} MODULE WITH_SOABI)
 target_sources(${PROJECT_NAME} PRIVATE ${sources})
 
-set_target_properties(${PROJECT_NAME} PROPERTIES
-  INTERPROCEDURAL_OPTIMIZATION ${BRUJERIA_IPO_SUPPORTED}
-  SUFFIX ${BRUJERIA_MODULE_EXTENSION}
-  PREFIX "")
+target_include_directories(${PROJECT_NAME}
+  PRIVATE
+    $<BUILD_INTERFACE:${BRUJERIA_MODULE_PATH}/include>)
+target_compile_definitions(${PROJECT_NAME} PRIVATE  $<${is-mingw}:_hypot=hypot>)
+target_compile_options(${PROJECT_NAME}
+  PRIVATE
+    $<$<COMPILE_LANG_AND_ID:CXX,MSVC>:/permissive->
+    "$<${is-mingw}:-include cmath>"
+    $<$<COMPILE_LANG_AND_ID:CXX,GNU>:-fdiagnostic-color=always>
+    $<$<COMPILE_LANG_AND_ID:CXX,AppleClang,Clang>:-fcolor-diagnostics>)
+target_link_libraries(${PROJECT_NAME} PRIVATE Python::Module)
 
-# Look into copying/symlinking init.cmake to a CMakeLists.txt file so we can add_subdirectory it?
+# TODO: This *could* be turned into a call to
+# cmake_language(DEFER DIRECTORY CALL include ${BRUJERIA_MODULE_PATH}/init.cmake)
+# but further up and within the template file that is copied over
 include(${BRUJERIA_MODULE_PATH}/init.cmake)
+
+# TODO: Add support for cython modules.
+# TODO: Add support for SWIG modules.

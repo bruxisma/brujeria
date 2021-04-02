@@ -1,13 +1,21 @@
 from importlib.machinery import ModuleSpec, ExtensionFileLoader
 from importlib.abc import MetaPathFinder
+
+from functools import partial
 from pathlib import Path
 
 import shutil
 import sys
 
-from . import utility
 from . import tool  # TODO: Replace with `from curandera import CMake`
 from . import app
+
+
+class rpartial(partial):
+    def __call__(self, *args, **kwargs):
+        kw = self.keywords.copy()
+        kw.update(kwargs)
+        return self.func(*args, *self.args, **kwargs)
 
 
 class CMakeLoader(ExtensionFileLoader):
@@ -33,7 +41,7 @@ class CMakeFinder(MetaPathFinder):
         shutil.rmtree(app.CACHE_HOME / "brujeria")
 
     def find_spec(self, fullname, path, target=None):
-        mod = utility.rpartial(Path, *fullname.split("."), "init.cmake")
+        mod = rpartial(Path, *fullname.split("."), "init.cmake")
         paths = path or [Path.cwd(), *sys.path]
         for entry in filter(Path.is_file, map(mod, paths)):
             loader = CMakeLoader(fullname)
