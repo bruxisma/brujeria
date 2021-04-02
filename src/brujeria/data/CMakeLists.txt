@@ -4,9 +4,10 @@ project(${BRUJERIA_PROJECT_NAME}
   DESCRIPTION "${BRUJERIA_PROJECT_DESCRIPTION}"
   VERSION "${BRUJERIA_PROJECT_VERSION}")
 
+find_package(Python COMPONENTS Interpreter Development.Module REQUIRED)
 include(CMakePrintHelpers)
 
-find_package(Python COMPONENTS Interpreter Development.Module REQUIRED)
+set(CMAKE_MSVC_RUNTIME_LIBRARY MultiThreaded$<$<CONFIG:Debug>:Debug>)
 
 file(GLOB_RECURSE sources CONFIGURE_DEPENDS ${BRUJERIA_MODULE_PATH}/src/*)
 
@@ -26,10 +27,9 @@ target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_17)
 target_compile_options(${PROJECT_NAME}
   PRIVATE
     $<$<COMPILE_LANG_AND_ID:CXX,MSVC>:/permissive->
-    "$<${is-mingw}:-include cmath>"
-    $<$<COMPILE_LANG_AND_ID:CXX,GNU>:-fdiagnostic-color=always>
+    $<${is-mingw}:-include cmath>
+    $<$<COMPILE_LANG_AND_ID:CXX,GNU>:-fdiagnostics-color=always>
     $<$<COMPILE_LANG_AND_ID:CXX,AppleClang,Clang>:-fcolor-diagnostics>)
-target_link_libraries(${PROJECT_NAME} PRIVATE Python::Module)
 
 # TODO: This *could* be turned into a call to
 # cmake_language(DEFER DIRECTORY CALL include ${BRUJERIA_MODULE_PATH}/init.cmake)
