@@ -22,6 +22,7 @@ target_include_directories(${PROJECT_NAME}
   PRIVATE
     $<BUILD_INTERFACE:${BRUJERIA_MODULE_PATH}/include>)
 target_compile_definitions(${PROJECT_NAME} PRIVATE  $<${is-mingw}:_hypot=hypot>)
+target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_17)
 target_compile_options(${PROJECT_NAME}
   PRIVATE
     $<$<COMPILE_LANG_AND_ID:CXX,MSVC>:/permissive->
